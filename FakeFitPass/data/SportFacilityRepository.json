@@ -1,0 +1,22 @@
+[
+    {"entity": {
+        "name" : "ProGym",
+        "type": "Gym",
+        "content": "PersonalWorkout",
+        "status": true,
+        "location" : {
+            "longitude": 15.0,
+            "latitude": 46.0,
+            "street" : "Kornelija Stankovica",
+            "number" : 5,
+            "city" : "Novi Sad",
+            "postalCode": 21000
+        },
+        "image": null,
+        "averageScore" : 4.98,
+        "startTime" :"2022-06-03 7:00:00",
+        "endTime" : "2022-06-03 22:00:00"
+     },
+     "deleted": false
+    }
+]
