@@ -24,6 +24,16 @@ public class User {
 		this.dateOfBirth = dateOfBirth;
 		this.role = role;
 	}
+	
+	public User(User user) {
+		this.username = user.getUsername();
+		this.password = user.getPassword();
+		this.name = user.getName();
+		this.surname = user.getSurname();
+		this.gender = user.getGender();
+		this.dateOfBirth = user.getDateOfBirth();
+		this.role = user.getRole();
+	}
 
 	public String getUsername() {
 		return username;
@@ -79,6 +89,10 @@ public class User {
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+	
+	public String getRoleName() {
+		return role.name();
 	}
 	
 	

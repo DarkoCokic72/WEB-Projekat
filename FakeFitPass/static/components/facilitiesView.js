@@ -26,22 +26,22 @@ Vue.component('facilitiesView', {
     },
     template:  `
         <div> 
-        </div>
+        
 
         <table id = "tabela" border = "1">
             <thead>
                 <tr>
-                    <th>Naziv<th>
-                    <th>Tip objekta<th>
-                    <th>Lokacija<th>
-                    <th>Logo<th>
-                    <th>Prosecna ocena<th>
-                    <th>Radno vreme<th>
-                    <th>Status <th>
+                    <th>Naziv</th>
+                    <th>Tip objekta</th>
+                    <th>Lokacija</th>
+                    <th>Logo</th>
+                    <th>Prosecna ocena</th>
+                    <th>Radno vreme</th>
+                    <th>Status </th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for = "facility of facilities">
+                <tr v-for = "(facility, idx) in facilities">
                     <td>{{facility.name}}</td>
                     <td>{{facility.type}}</td>
                     <td>{{facility.location.postalCode}} <br>
@@ -58,7 +58,7 @@ Vue.component('facilitiesView', {
                     <td class = "open">Otvoren</td>
                 </tr>
 
-                <tr v-for = "facility in facilities">
+                <tr v-for = "(facility, idx) in facilities">
                     <td>{{facility.name}}</td>
                     <td>{{facility.type}}</td>
                     <td>{{facility.location.postalCode}} <br>
@@ -76,5 +76,6 @@ Vue.component('facilitiesView', {
                 </tr>
             </tbody>
         </table>
+        </div>
     `
 })
