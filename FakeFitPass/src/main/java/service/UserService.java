@@ -1,6 +1,10 @@
 package service;
 
 import beans.User;
+import beans.Administrator;
+import beans.Coach;
+import beans.Customer;
+import beans.Manager;
 import repository.AdministratorRepository;
 import repository.CoachRepository;
 import repository.CustomerRepository;
@@ -32,7 +36,21 @@ public class UserService {
 		if (user != null) {
 			return user;
 		}
-		
 		return user;
+	}
+	
+	public boolean register(User user) {
+		switch(user.getRoleName()) {
+		case "Administrator":
+			return administratorRepository.addOne(new Administrator(user));
+		case "Coach":
+			return coachRepository.addOne(new Coach(user));
+		case "Customer":
+			return customerRepository.addOne(new Customer(user));
+		case "Manager":
+			return managerRepository.addOne(new Manager(user));
+		default:
+			return false;
+		}
 	}
 }

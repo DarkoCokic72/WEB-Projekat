@@ -5,6 +5,7 @@ const Customer = {template: '<customer />'}
 const Administrator = {template: '<administrator />'}
 const Manager = {template: '<manager />'}
 const Coach = {template: '<coach />'}
+const Registration = {template : '<registration/>'}
 
 const router = new VueRouter({
 	mode: 'hash',
@@ -14,7 +15,8 @@ const router = new VueRouter({
 		{path: '/customer', component: Customer},
 		{path: '/admin', component: Administrator},
 		{path: '/manager', component: Manager},
-		{path: '/coach', component: Coach}
+		{path: '/coach', component: Coach},
+		{path: '/registration', component: Registration}
 	  ]
 });
 

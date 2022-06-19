@@ -21,6 +21,10 @@ public class Customer extends User{
 		this.collectedPoints = 0;
 		this.type = new TypeOfCustomer(type.getTypeName());
 	}
+	
+	public Customer(User user) {
+		super(user);
+	}
 
 	public Membership getMembership() {
 		return membership;

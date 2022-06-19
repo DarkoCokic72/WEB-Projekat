@@ -9,6 +9,10 @@ public class Manager extends User{
 		super(username, password, name, surname, gender, dateOfBirth, Role.Manager);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public Manager(User user) {
+		super(user);
+	}
 
 	public SportFacility getSportFacility() {
 		return sportFacility;

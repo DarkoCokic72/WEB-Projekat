@@ -10,10 +10,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.core.Context;
-
 import com.google.gson.Gson;
-
+import com.google.gson.GsonBuilder;
 
 import beans.SportFacility;
 import beans.User;
@@ -22,7 +20,6 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.ServletContext;
 import repository.AdministratorRepository;
 import repository.CoachRepository;
 import repository.CustomerRepository;
@@ -80,6 +77,15 @@ public class MainApp {
 
 			return gson.toJson(response);
 			
+		});
+		
+		post("/registration", (req, res) -> {
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			User user = gsonReg.fromJson(req.body(), User.class);
+			if (!userService.register(user)) {
+				return false;
+			}
+			return true;
 		});
 		
 		get("/checkJWT", (req, res) -> {

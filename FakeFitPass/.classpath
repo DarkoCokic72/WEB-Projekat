@@ -14,6 +14,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="/SparkREST/lib/gson-2.2.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Digital Planet/Desktop/Web projekat 2021-2022/WEB-Projekat/FakeFitPass/src/main/webapp/WEB-INF/lib/gson-2.2.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

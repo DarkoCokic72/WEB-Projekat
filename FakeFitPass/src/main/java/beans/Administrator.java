@@ -9,4 +9,8 @@ public class Administrator extends User{
 		// TODO Auto-generated constructor stub
 	}
 	
+	public Administrator(User user) {
+		super(user);
+	}
+	
 }

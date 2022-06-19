@@ -48,6 +48,7 @@ Vue.component('login', {
 				<input class="textinput" v-model="username" type="text" placeholder="Uneti korisničko ime" id="username" name="username"><br/>
 				<input class="textinput" v-model="password" type="password" placeholder="Uneti lozinku" id="password" name="password"><br/>
 				<button class="textinput" type="submit">Prijava</button>
+				<a class="textinput" href="/#/registration">Registracija</a>
 			</form>
 		</div>
 	</div>

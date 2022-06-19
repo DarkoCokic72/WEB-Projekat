@@ -10,6 +10,10 @@ public class Coach extends User{
 		super(username, password, name, surname, gender, dateOfBirth, Role.Coach);
 		this.workoutHistory = workoutHistory;
 	}
+	
+	public Coach(User user) {
+		super(user);
+	}
 
 	public WorkoutHistory getWorkoutHistory() {
 		return workoutHistory;
