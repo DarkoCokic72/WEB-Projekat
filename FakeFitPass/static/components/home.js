@@ -5,7 +5,9 @@ Vue.component('home', {
 	
 	template: `
 	<div>
-	<login class="center"/> <br/>
+		<login class="center"/> <br/>
+		<h2>NAse teretane </h2>
+		<facilitiesView />
 	</div>
 `
 })

@@ -13,7 +13,9 @@ public class SportFacility {
 	private LocalDateTime startTime;
 	private LocalDateTime endTime;
 	
-	public SportFacility() {}
+	public SportFacility() {
+		averageScore = 0;
+	}
 	
 	public SportFacility(String name, TypeOfFacility type, Content content, boolean status, Location location,
 			String image, double averageScore, LocalDateTime startTime, LocalDateTime endTime) {
@@ -53,7 +55,7 @@ public class SportFacility {
 		this.content = content;
 	}
 
-	public boolean isStatus() {
+	public boolean getStatus() {
 		return status;
 	}
 

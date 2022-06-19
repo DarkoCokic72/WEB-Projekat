@@ -13,6 +13,7 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+
 import beans.SportFacility;
 import beans.User;
 import io.jsonwebtoken.Claims;
@@ -25,6 +26,7 @@ import repository.CoachRepository;
 import repository.CustomerRepository;
 import repository.ManagerRepository;
 import repository.SportFacilityRepository;
+import service.SportFacilityService;
 import service.UserService;
 
 public class MainApp {
@@ -35,6 +37,7 @@ public class MainApp {
 	private static CoachRepository coachRepository = new CoachRepository();
 	private static ManagerRepository managerRepository = new ManagerRepository();
 	private static AdministratorRepository administratorRepository = new AdministratorRepository();
+	private static SportFacilityService sportFacilityService = new SportFacilityService();
 	private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
 	
@@ -54,7 +57,19 @@ public class MainApp {
 		
 		get("/allFacilities", (req, res) -> {
 			res.type("application/json");
-			return gson.toJson(sportFacilityRepository.getAll());
+			List<SportFacility> unfiltered = sportFacilityRepository.getAll();
+			String nameSearch = req.queryParams("nameSearch");
+			String locationSearch = req.queryParams("locationSearch");
+			String typeSearch = req.queryParams("typeSearch");
+			String scoreSearch = req.queryParams("scoreSearch");
+			
+			if(nameSearch == null || locationSearch == null || typeSearch == null || scoreSearch == null) {
+				return gson.toJson(unfiltered);
+			}
+			
+			List<SportFacility> filtered = sportFacilityService.filterFacilities(unfiltered, nameSearch, locationSearch, scoreSearch, typeSearch);
+			
+			return gson.toJson(filtered);
 		});
 		
 		post("/login", (req, res) -> {
