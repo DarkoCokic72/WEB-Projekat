@@ -1,0 +1,35 @@
+
+table tr:nth-child(even){
+    background-color: rgb(231, 190, 190);
+}
+
+tr:hover td{
+    background-color: aquamarine;
+}
+
+tr th {
+    background-color: grey;
+}
+
+a:hover{
+    color: rgb(212, 62, 25)
+}
+
+table {
+    border-style: solid ;
+    border-color: black;
+}
+
+h1, h2, h3 {
+    font-family: Arial, Helvetica, sans-serif;
+    color: darkblue;
+}
+
+.open {
+    color: green;
+    font:bold;
+}
+td , th{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    padding: 5px;
+}

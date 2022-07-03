@@ -12,13 +12,9 @@ Vue.component('facilitiesView', {
     },
     methods: {
         "search": function(e){
-            axios.get("/allFacilities", {
-                params: {
-                    name_search: this.name_search,
-                    type_search: this.type_search,
-                    score_search: this.score_search,
-                    location_search: this.location_search
-                }
+			console.log(this.name_search)
+            axios.get("/allFacilities?nameSearch=" + this.name_search + "&typeSearch=" + this.type_search + "&scoreSearch=" + this.score_search + "&locationSearch=" + this.location_search, {
+               
             }).then(response => {
                 this.facilities = response.data; 
             })

@@ -12,12 +12,17 @@ public class SportFacilityService {
 		double scoreLowerBound = scoreSearch.equals("") ? -1 : Double.parseDouble(scoreSearch.split("-")[0]);
 		
 		for(SportFacility facility: unfiltered) {
-			if(facility.getName().toLowerCase().startsWith(nameSearch.toLowerCase()) &&
+			/*if(facility.getName().toLowerCase().startsWith(nameSearch.toLowerCase()) &&
 				facility.getLocation().getCity().startsWith(locationSearch.toLowerCase()) &&
 				(facility.getType().name().equals(typeSearch) || nameSearch == null) &&
 				facility.getAverageScore() >= scoreLowerBound) {
 				
 				filtered.add(facility);
+			}*/
+			System.out.println(facility.getName());
+			if(facility.getName().toLowerCase().startsWith(nameSearch.toLowerCase())) {
+				filtered.add(facility);
+				System.out.println(facility.getName());
 			}
 		}
 		
