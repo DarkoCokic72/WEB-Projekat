@@ -62,16 +62,10 @@ public class MainApp {
 			String locationSearch = req.queryParams("locationSearch");
 			String typeSearch = req.queryParams("typeSearch");
 			String scoreSearch = req.queryParams("scoreSearch");
-			
-			System.out.println(nameSearch);
-			System.out.println(locationSearch);
-			System.out.println(typeSearch);
-			System.out.println(scoreSearch);
+
 			if(nameSearch == null && locationSearch == null && typeSearch == null && scoreSearch == null) {
 				return gson.toJson(unfiltered);
 			}
-			
-			System.out.println("Test bre");
 			
 			List<SportFacility> filtered = sportFacilityService.filterFacilities(unfiltered, nameSearch, locationSearch, scoreSearch, typeSearch);
 			

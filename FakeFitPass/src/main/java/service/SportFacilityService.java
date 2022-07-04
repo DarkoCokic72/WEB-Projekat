@@ -11,21 +11,15 @@ public class SportFacilityService {
 		List<SportFacility> filtered = new ArrayList<SportFacility>();
 		double scoreLowerBound = scoreSearch.equals("") ? -1 : Double.parseDouble(scoreSearch.split("-")[0]);
 		
-		for(SportFacility facility: unfiltered) {
-			/*if(facility.getName().toLowerCase().startsWith(nameSearch.toLowerCase()) &&
-				facility.getLocation().getCity().startsWith(locationSearch.toLowerCase()) &&
-				(facility.getType().name().equals(typeSearch) || nameSearch == null) &&
-				facility.getAverageScore() >= scoreLowerBound) {
-				
+		for(SportFacility facility: unfiltered) 
+		{
+			if(facility.getName().toLowerCase().startsWith(nameSearch.toLowerCase()) &&
+				(facility.getLocation().getCity().toLowerCase().startsWith(locationSearch.toLowerCase()) || facility.getLocation().getStreet().toLowerCase().startsWith(locationSearch.toLowerCase()))
+				&& facility.getAverageScore() >= scoreLowerBound && (facility.getType().equals(TypeOfFacility.fromString(typeSearch)) || TypeOfFacility.fromString(typeSearch) == null)) 
+			{
 				filtered.add(facility);
-			}*/
-			System.out.println(facility.getName());
-			if(facility.getName().toLowerCase().startsWith(nameSearch.toLowerCase())) {
-				filtered.add(facility);
-				System.out.println(facility.getName());
 			}
 		}
-		
 		return filtered;
 	}
 }
