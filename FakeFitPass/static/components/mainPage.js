@@ -23,7 +23,7 @@ Vue.component('mainPage', {
 			.then(response => {
 				if(response.data)
 				{ 
-					this.logged=true;
+					this.logged = true;
 					if(window.localStorage.getItem("role")==='Administrator')
 					{
 					 	this.$router.push('/admin');						

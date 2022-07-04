@@ -1,12 +1,12 @@
-
 const Home = {template : '<home></home>'}
 const MainPage = {template: '<mainPage></mainPage>'}
-const Customer = {template: '<customer />'}
-const Administrator = {template: '<administrator />'}
-const Manager = {template: '<manager />'}
-const Coach = {template: '<coach />'}
+const Customer = {template: '<customer/>'}
+const Administrator = {template: '<administrator/>'}
+const Manager = {template: '<manager/>'}
+const Coach = {template: '<coach/>'}
 const Registration = {template : '<registration/>'}
-const FacilitiesView = {template: '<facilitiesView />'}
+const FacilitiesView = {template: '<facilitiesView/>'}
+const DisplayFacility = {template: '<displayFacility/>'}
 
 const router = new VueRouter({
 	mode: 'hash',
@@ -18,7 +18,8 @@ const router = new VueRouter({
 		{path: '/manager', component: Manager},
 		{path: '/coach', component: Coach},
 		{path: '/registration', component: Registration},
-		{path: '/facilitiesView', component: FacilitiesView}
+		{path: '/facilitiesView', component: FacilitiesView},
+		{path: '/displayFacility/:name', component: DisplayFacility}
 	  ]
 });
 

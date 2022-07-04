@@ -55,23 +55,6 @@ public class MainApp {
 
 		staticFiles.externalLocation(new File("./static").getCanonicalPath());
 		
-		get("/allFacilities", (req, res) -> {
-			res.type("application/json");
-			List<SportFacility> unfiltered = sportFacilityRepository.getAll();
-			String nameSearch = req.queryParams("nameSearch");
-			String locationSearch = req.queryParams("locationSearch");
-			String typeSearch = req.queryParams("typeSearch");
-			String scoreSearch = req.queryParams("scoreSearch");
-
-			if(nameSearch == null && locationSearch == null && typeSearch == null && scoreSearch == null) {
-				return gson.toJson(unfiltered);
-			}
-			
-			List<SportFacility> filtered = sportFacilityService.filterFacilities(unfiltered, nameSearch, locationSearch, scoreSearch, typeSearch);
-			
-			return gson.toJson(filtered);
-		});
-		
 		post("/login", (req, res) -> {
 			String username = req.queryParams("username");
 			String password = req.queryParams("password");
@@ -101,6 +84,27 @@ public class MainApp {
 				return false;
 			}
 			return true;
+		});
+		
+		get("/allFacilities", (req, res) -> {
+			res.type("application/json");
+			List<SportFacility> unfiltered = sportFacilityRepository.getAll();
+			String nameSearch = req.queryParams("nameSearch");
+			String locationSearch = req.queryParams("locationSearch");
+			String typeSearch = req.queryParams("typeSearch");
+			String scoreSearch = req.queryParams("scoreSearch");
+
+			if(nameSearch == null && locationSearch == null && typeSearch == null && scoreSearch == null) {
+				return gson.toJson(unfiltered);
+			}
+			
+			List<SportFacility> filtered = sportFacilityService.filterFacilities(unfiltered, nameSearch, locationSearch, scoreSearch, typeSearch);
+			
+			return gson.toJson(filtered);
+		});
+		
+		get("/facilityByName", (req, res) -> {
+			return gson.toJson(sportFacilityRepository.getOne(req.queryParams("name")));
 		});
 		
 		get("/checkJWT", (req, res) -> {

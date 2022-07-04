@@ -61,7 +61,12 @@ Vue.component('facilitiesView', {
 				}
 				return 0;
 			  })
-	    }
+	    },
+        "displayFacility": function displayFacility(name) {
+
+			this.$router.push('/displayFacility/' + name);
+			
+		}
     },
     mounted() {
         axios.get("/allFacilities",{
@@ -127,7 +132,7 @@ Vue.component('facilitiesView', {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for = "facility in filteredFacilities" v-if="facility.status">
+                    <tr v-for="facility in filteredFacilities" v-if="facility.status" v-on:click="displayFacility(facility.name)">
                         <td>{{facility.name}}</td>
                         <td>{{facility.type}}</td>
                         <td>{{facility.location.postalCode}} <br />
@@ -136,12 +141,12 @@ Vue.component('facilitiesView', {
                             {{facility.location.longitude}} {{facility.location.latitude}}
                         </td>
                         <td>
-                            <img :src = "facility.image" />
+                            <img :src="facility.image"/>
                         </td>
                         <td> {{facility.content}}</td>
                         <td>{{facility.startTime.time.hour}} - {{facility.endTime.time.hour}}</td>
                         <td class = "open">Otvoren</td>
-                        <td>{{facility.averageScore}} /5</td>
+                        <td>{{facility.averageScore}}/5</td>
                     </tr>
                 </tbody>
             </table>
