@@ -1,14 +1,1 @@
-[{
-    "entity":{
-        "username": "admin",
-        "password": "pikacu",
-        "name": "Bog",
-        "surname": "Otac",
-        "gender": "male",
-        "dateOfBirth": "1964-01-01T00:00:00",
-        "role": "Administrator"
-    },
-    "deleted": false
-
-    
-}]
+[{"entity":{"username":"admin","password":"admin","name":"Mile","surname":"Milovic","gender":"male","dateOfBirth":"1978-03-04T00:00:00","role":"Administrator"},"deleted":false}]

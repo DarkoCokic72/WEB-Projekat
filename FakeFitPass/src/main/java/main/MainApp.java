@@ -2,6 +2,7 @@ package main;
 import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.post;
+import static spark.Spark.put;
 import static spark.Spark.staticFiles;
 
 import java.io.File;
@@ -105,6 +106,36 @@ public class MainApp {
 		
 		get("/facilityByName", (req, res) -> {
 			return gson.toJson(sportFacilityRepository.getOne(req.queryParams("name")));
+		});
+		
+		get("/obtainData", (req, res) -> {
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			String username = getUsername(req.queryParams("jwt"));
+			User user = userService.findByID(username);
+			return gsonReg.toJson(user);
+		});
+		
+		put("/editData", (req, res) -> {
+			String jwt = req.queryParams("jwt");
+			String username = getUsername(jwt);
+
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			User editedUser = gsonReg.fromJson(req.body(), User.class);
+			User user = userService.findByID(username);
+
+			user.setDateOfBirth(editedUser.getDateOfBirth());
+			user.setName(editedUser.getName());
+			user.setPassword(editedUser.getPassword());
+			user.setGender(editedUser.getGender());
+			user.setSurname(editedUser.getSurname());
+
+			userService.update(user);
+			return true;
+		});
+		
+		get("/allUsers", (req, res) -> {
+			List<User> unfiltered = userService.getAll();
+			return gson.toJson(unfiltered);
 		});
 		
 		get("/checkJWT", (req, res) -> {
