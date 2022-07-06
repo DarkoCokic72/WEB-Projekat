@@ -5,6 +5,7 @@ Vue.component('allUsers', {
             usernameSearch: '',
             nameSearch: '',
             surnameSearch: '',
+            sortColumn: '',
             columns: [{ name: "username" }, { name: "name" }, { name: "surname" }],
 			names: ["Korisničko ime", "Ime", "Prezime"]
         }
@@ -19,7 +20,25 @@ Vue.component('allUsers', {
 							this.users = response.data;
 						}
 					})
-        }
+        },
+        "sortTable": function sortTable(col) {
+			if (this.sortColumn === col) {
+				this.ascending = !this.ascending;
+			} else {
+				this.ascending = true;
+				this.sortColumn = col;
+			}
+
+			var ascending = this.ascending;
+			this.users.sort(function(a, b) {
+				if (a[col] > b[col]) {
+					return ascending ? 1 : -1
+				} else if (a[col] < b[col]) {
+					return ascending ? -1 : 1
+				}
+				return 0;
+			})
+		}
     },
     mounted(){
         axios.get("/allUsers", {
@@ -37,7 +56,7 @@ Vue.component('allUsers', {
     template:
     `
         <div>
-            <h1>Svi korisnici</h1>
+            <h1>Pregled svih korisnika</h1>
             <div>
                 <input type="text" placeholder="Korisničko ime" v-model="usernameSearch">
                 <input type="text" placeholder="Ime" v-model="nameSearch">
@@ -47,7 +66,7 @@ Vue.component('allUsers', {
             <table id="table">
                 <thead>
                     <tr>
-                        <th v-for="(col, index) in columns">
+                        <th v-for="(col, index) in columns" v-on:click="sortTable(col.name)">
                             {{names[index]}}
                         </th>
                     </tr>
