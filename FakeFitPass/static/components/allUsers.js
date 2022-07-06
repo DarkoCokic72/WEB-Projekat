@@ -2,8 +2,23 @@ Vue.component('allUsers', {
     data: function(){
         return{
             users: null,
+            usernameSearch: '',
+            nameSearch: '',
+            surnameSearch: '',
             columns: [{ name: "username" }, { name: "name" }, { name: "surname" }],
 			names: ["Korisničko ime", "Ime", "Prezime"]
+        }
+    },
+    methods:{
+        "search": function(e){
+            axios.get("/allUsers?nameSearch=" + this.nameSearch + "&surnameSearch=" + this.surnameSearch + "&usernameSearch=" + this.usernameSearch,
+				    )
+					.then(response => {
+						if(response.data)
+						{ 
+							this.users = response.data;
+						}
+					})
         }
     },
     mounted(){
@@ -23,6 +38,12 @@ Vue.component('allUsers', {
     `
         <div>
             <h1>Svi korisnici</h1>
+            <div>
+                <input type="text" placeholder="Korisničko ime" v-model="usernameSearch">
+                <input type="text" placeholder="Ime" v-model="nameSearch">
+			    <input type="text" placeholder="Prezime" v-model="surnameSearch">
+			    <button v-on:click="search">Pretraga</button>
+            </div>
             <table id="table">
                 <thead>
                     <tr>

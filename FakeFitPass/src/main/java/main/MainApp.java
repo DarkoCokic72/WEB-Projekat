@@ -100,7 +100,6 @@ public class MainApp {
 			}
 			
 			List<SportFacility> filtered = sportFacilityService.filterFacilities(unfiltered, nameSearch, locationSearch, scoreSearch, typeSearch);
-			
 			return gson.toJson(filtered);
 		});
 		
@@ -135,7 +134,13 @@ public class MainApp {
 		
 		get("/allUsers", (req, res) -> {
 			List<User> unfiltered = userService.getAll();
-			return gson.toJson(unfiltered);
+			String nameSearch = req.queryParams("nameSearch");
+			String surnameSearch = req.queryParams("surnameSearch");
+			String usernameSearch = req.queryParams("usernameSearch");
+			if (nameSearch == null && surnameSearch == null && usernameSearch == null) {
+				return gson.toJson(unfiltered);
+			}
+			return gson.toJson(userService.filterUsers(unfiltered, nameSearch, surnameSearch, usernameSearch));
 		});
 		
 		get("/checkJWT", (req, res) -> {

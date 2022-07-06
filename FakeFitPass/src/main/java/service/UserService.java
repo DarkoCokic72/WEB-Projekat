@@ -93,4 +93,18 @@ public class UserService {
 		}
 		return retVal;
 	}
+	
+	public List<User> filterUsers(List<User> unfiltered, String nameSearch, String surnameSearch, String usernameSearch) {
+		List<User> filtered = new ArrayList<User>();
+		for (User user : unfiltered)
+		{
+			if(user.getName().toLowerCase().startsWith(nameSearch.toLowerCase()) &&
+					user.getSurname().toLowerCase().startsWith(surnameSearch.toLowerCase())&&
+					user.getUsername().toLowerCase().startsWith(usernameSearch.toLowerCase()))
+			{
+				filtered.add(user);
+			}
+		}
+		return filtered;
+	}
 }
