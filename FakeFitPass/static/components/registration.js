@@ -37,6 +37,11 @@ Vue.component('registration', {
 				alert("Morate popuniti sva polja!")
 			}
 			else if (localStorage.getItem('registracijaNovog') === "true"){
+				if(this.gender === "Muski"){
+					this.gender = "male";
+				}else{
+					this.gender = "female";
+				}
 				axios
 					.post('/registration', {
 						username: this.username,

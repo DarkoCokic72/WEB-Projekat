@@ -118,7 +118,7 @@ Vue.component('facilitiesView', {
 				<option>Zatvoren</option>
 			</select>
 		    </div>
-            <table id = "table" border = "1">
+            <table id="table" border="1">
                 <thead>
                     <tr>
                         <th v-on:click="sortTable('name')">Naziv</th>
