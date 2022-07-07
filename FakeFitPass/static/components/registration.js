@@ -11,7 +11,8 @@ Vue.component('registration', {
 			roleCustomer: 'Customer',
 			role: localStorage.getItem('role'),
 			jwt: localStorage.getItem('jwt'),
-			registracijaNovog: localStorage.getItem('registracijaNovog')
+			registracijaNovog: localStorage.getItem('registracijaNovog'),
+			currentFacility: localStorage.getItem("currentFacility")
 		}
 	},
 	methods: {
@@ -37,6 +38,9 @@ Vue.component('registration', {
 				alert("Morate popuniti sva polja!")
 			}
 			else if (localStorage.getItem('registracijaNovog') === "true"){
+				if(localStorage.getItem("currentFacility") !== "null"){
+					this.role = "Manager";
+				}
 				if(this.gender === "Muski"){
 					this.gender = "male";
 				}else{
@@ -51,12 +55,12 @@ Vue.component('registration', {
 						gender: this.gender,
 						dateOfBirth: this.dateOfBirth,
 						role: this.role
-					})
+					}, {params: {facility: this.currentFacility}})
 					.then(response => (this.checkRegistrationResponse(response, e)));
 			}
 		},
 		renderAll: function() {
-			return localStorage.getItem('role') === 'Administrator' && localStorage.getItem('registracijaNovog') === "true";
+			return localStorage.getItem("currentFacility") !== "null" && localStorage.getItem('role') === 'Administrator' && localStorage.getItem('registracijaNovog') === "true";
 		}
 	},
 	mounted() {
