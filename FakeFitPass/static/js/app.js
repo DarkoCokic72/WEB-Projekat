@@ -9,6 +9,7 @@ const FacilitiesView = {template: '<facilitiesView/>'}
 const DisplayFacility = {template: '<displayFacility/>'}
 const EditUser = {template: '<editUser/>'}
 const AllUsers = {template: '<allUsers/>'}
+const NewFacility = {template: '<newFacility/>'}
 
 const router = new VueRouter({
 	mode: 'hash',
@@ -23,7 +24,8 @@ const router = new VueRouter({
 		{path: '/facilitiesView', component: FacilitiesView},
 		{path: '/displayFacility/:name', component: DisplayFacility},
 		{path: '/editUser', component: EditUser},
-		{path: '/allUsers', component: AllUsers}
+		{path: '/allUsers', component: AllUsers},
+		{path: '/newFacility', component: NewFacility}
 	  ]
 });
 

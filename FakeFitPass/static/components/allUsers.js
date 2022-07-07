@@ -14,9 +14,7 @@ Vue.component('allUsers', {
             surnameSearch: '',
             sortColumn: '',
             typeFilter: '',
-            roleFilter: '',
-            columns: [{ name: "username" }, { name: "name" }, { name: "surname" }, { name: "gender" }, { name: "collectedPoints" }],
-			names: ["Korisničko ime", "Ime", "Prezime", "Pol", "Sakupljeni bodovi"]
+            roleFilter: ''
         }
     },
     computed: {

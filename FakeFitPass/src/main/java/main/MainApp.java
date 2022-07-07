@@ -7,6 +7,7 @@ import static spark.Spark.staticFiles;
 
 import java.io.File;
 import java.security.Key;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,7 @@ import com.google.gson.GsonBuilder;
 
 
 import beans.SportFacility;
+import beans.SportFacilityTemp;
 import beans.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -84,6 +86,13 @@ public class MainApp {
 			if (!userService.register(user)) {
 				return false;
 			}
+			
+			String facilityName = req.queryParams("facility");
+			System.out.println(facilityName);
+			if (!facilityName.equals("null")) {
+				managerRepository.setFacilityForManagerUsername(facilityName,
+						managerRepository.getOne(user.getUsername()));
+			}
 			return true;
 		});
 		
@@ -141,6 +150,23 @@ public class MainApp {
 				return gson.toJson(unfiltered);
 			}
 			return gson.toJson(userService.filterUsers(unfiltered, nameSearch, surnameSearch, usernameSearch));
+		});
+		
+		get("/freeManagers", (req, res) -> {
+			return gson.toJson(managerRepository.getFreeManagersUsernames());
+		});
+		
+		post("/newFacility", (req, res) -> {
+			SportFacilityTemp sportFacilityTemp = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm").create().fromJson(req.body(), SportFacilityTemp.class);
+			SportFacility sportFacility = new SportFacility(sportFacilityTemp.getName(), sportFacilityTemp.getType(), null, true, sportFacilityTemp.getLocation(), sportFacilityTemp.getImage(), 0.0, 
+					LocalDateTime.parse(sportFacilityTemp.getStartTime()), LocalDateTime.parse(sportFacilityTemp.getEndTime()));
+			if (!sportFacilityRepository.addOne(sportFacility)) {
+				return false;
+			}
+			if (req.queryParams("manager") != null) {
+				managerRepository.setFacilityForManagerUsername(sportFacility, req.queryParams("manager"));
+			}
+			return true;
 		});
 		
 		get("/checkJWT", (req, res) -> {

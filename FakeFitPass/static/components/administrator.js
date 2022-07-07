@@ -20,7 +20,8 @@ Vue.component('administrator', {
 		<a href="/#/" v-on:click="logout()">Odjava</a><br/>
 		<a href="/#/registration" v-on:click="new(true)">Registracija novog korisnika</a><br/>
 		<a href="/#/allUsers">Pregled svih korisnika</a><br/>
-		<a href="/#/editUser">Pregled i izmena ličnih podataka</a><br/>  
+		<a href="/#/editUser">Pregled i izmena ličnih podataka</a><br/>
+		<a href="/#/newFacility">Novi sportski objekat</a><br/> 
 	</div>                   
 `
 })
