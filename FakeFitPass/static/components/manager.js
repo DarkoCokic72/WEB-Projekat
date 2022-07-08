@@ -21,6 +21,7 @@ Vue.component('manager', {
 		<a href="/#/" v-on:click="logout()">Odjava</a><br/>
 		<a href="/#/editUser">Pregled i izmena ličnih podataka</a><br/>
 		<a href="/#/newContent">Dodavanje novog sadrzaja</a><br />
+		<a href="/#/displayContentForEdit">Prikaz sadrzaja za izmenu</a><br />
 	</div>                   
 `
 })

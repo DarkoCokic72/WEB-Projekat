@@ -6,7 +6,7 @@ Vue.component('newContent', {
 			image: null,
 			description: null,
             duration: null,
-            coach: null,
+            coach: "",
 			editMode: false,
 			file: null,
 			jwt: localStorage.getItem('jwt'),
@@ -34,9 +34,6 @@ Vue.component('newContent', {
 
 			if (!this.name || !this.type || !this.image) {
 				alert("Morate navesto naziv, tip i sliku!")
-                console.log(this.name)
-                console.log(this.type)
-                console.log(this.image)
 				e.preventDefault();
 			} else  {
 				axios
@@ -75,7 +72,7 @@ Vue.component('newContent', {
                 if (response.data) {
                     this.coaches = response.data;
                 }
-                console.log(this.coaches)
+                
             })
     },
     template: `
@@ -110,11 +107,11 @@ Vue.component('newContent', {
                         <td><input type = "text" v-model = "description" /></td>
                     </tr>
                     <tr>
-                        <td>Trajanje</td>
+                        <td>Trajanje(opciono)</td>
                         <td><input type = "datetime-local" v-model = "duration" /></td>
                     </tr>
                     <tr>
-                        <td>Trener</td>
+                        <td>Trener(opciono)</td>
                         <td>
                             <select v-model="coach">
                                 <option v-for="item in coaches">{{item}}</option>

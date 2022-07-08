@@ -8,6 +8,7 @@ import static spark.Spark.staticFiles;
 import java.io.File;
 import java.security.Key;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +16,8 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-
+import beans.Coach;
+import beans.Manager;
 import beans.SportFacility;
 import beans.SportFacilityTemp;
 import beans.User;
@@ -90,7 +92,7 @@ public class MainApp {
 			}
 			
 			String facilityName = req.queryParams("facility");
-			System.out.println(facilityName);
+			
 			if (!facilityName.equals("null")) {
 				managerRepository.setFacilityForManagerUsername(facilityName,
 						managerRepository.getOne(user.getUsername()));
@@ -123,6 +125,33 @@ public class MainApp {
 			String username = getUsername(req.queryParams("jwt"));
 			User user = userService.findByID(username);
 			return gsonReg.toJson(user);
+		});
+		
+		get("/obtainContent", (req, res) -> {
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+			String username = getUsername(req.queryParams("jwt"));
+			Manager manager = managerRepository.getOne(username);
+			String facilityName = manager.getSportFacility().getName();
+			
+			List<Workout> content = sportFacilityRepository.getContentByFacilityName(facilityName);
+			return gsonReg.toJson(content);
+		});
+		
+		get("/obtainSingleContent", (req, res) -> {
+			Gson gsonReg = new GsonBuilder().create();
+			String username = getUsername(req.queryParams("jwt"));
+			String contentName = req.queryParams("name");
+			
+			Manager manager = managerRepository.getOne(username);
+			String facilityName = manager.getSportFacility().getName();
+			
+			Workout workout = sportFacilityRepository.getByContentName(facilityName, contentName);
+			
+			DateTimeFormatter formater = DateTimeFormatter.ISO_DATE_TIME;
+			
+			WorkoutTemp workoutTemp = new WorkoutTemp(workout.getName(), workout.getType(), workout.getSportFacility(), workout.getDuration().format(formater), workout.getCoach().getUsername(), workout.getDescription(), workout.getImage());
+			
+			return gsonReg.toJson(workoutTemp);
 		});
 		
 		put("/editData", (req, res) -> {
@@ -176,22 +205,57 @@ public class MainApp {
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm").create();
 			WorkoutTemp workoutTemp = gsonReg.fromJson(req.body(), WorkoutTemp.class);
 			
+			Coach c;
+			if(workoutTemp.getCoach().equals("")) {
+				c= new Coach();
+			} else {
+				c = coachRepository.getCoachByUsername(workoutTemp.getCoach());
+			}
+			
 			Workout workout = new Workout(workoutTemp.getName(),
 					workoutTemp.getType(),
 					null,
 					LocalDateTime.parse(workoutTemp.getDuration()),
-					coachRepository.getCoachByUsername(workoutTemp.getCoach()),
+					c,
 					workoutTemp.getDescription(),
 					workoutTemp.getImage());
 			
 			String jwt = req.queryParams("jwt");
 			String username = getUsername(jwt);
 			String facilityName = managerRepository.getFacilityName(username);
-			System.out.println(facilityName);
+			
 			if(sportFacilityRepository.getWorkout(facilityName, workout.getName()) != null) {
 				return false;
 			}
 			sportFacilityRepository.addWorkoutToContent(facilityName, workout);
+			return true;
+		});
+		
+		put("/editContent", (req, res) -> {
+			String jwt = req.queryParams("jwt");
+			String username = getUsername(jwt);
+			
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm").create();
+			WorkoutTemp workoutTemp = gsonReg.fromJson(req.body(), WorkoutTemp.class);
+			
+			Coach c;
+			if(workoutTemp.getCoach().equals("")) {
+				c= new Coach();
+			} else {
+				c = coachRepository.getCoachByUsername(workoutTemp.getCoach());
+			}
+			
+			Workout workout = new Workout(workoutTemp.getName(),
+					workoutTemp.getType(),
+					null,
+					LocalDateTime.parse(workoutTemp.getDuration()),
+					c,
+					workoutTemp.getDescription(),
+					workoutTemp.getImage());
+			
+			String facilityName = managerRepository.getFacilityName(username);
+			
+			sportFacilityRepository.putEditedContent(facilityName, workout);
 			return true;
 		});
 		

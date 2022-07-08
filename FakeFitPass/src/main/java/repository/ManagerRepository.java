@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken;
 
 import beans.Manager;
 import beans.SportFacility;
+import beans.Workout;
 import repository.Repository;
 import repository.LogicalEntity;
 
@@ -46,5 +47,10 @@ public class ManagerRepository extends Repository<Manager, String> {
 	public String getFacilityName(String username) {
 		Manager menadzer = getOne(username);
 		return menadzer.getSportFacility().getName();
+	}
+	
+	public List<Workout> getContentByUsername(String username){
+		Manager manager = getOne(username);
+		return manager.getSportFacility().getContent();
 	}
 }

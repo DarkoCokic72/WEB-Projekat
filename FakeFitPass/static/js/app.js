@@ -11,6 +11,8 @@ const EditUser = {template: '<editUser/>'}
 const AllUsers = {template: '<allUsers/>'}
 const NewFacility = {template: '<newFacility/>'}
 const NewContent = {template: '<newContent />'}
+const DisplayContentsForEdit = {template: '<displayContentForEdit />'}
+const editContent = {template: '<editContent />'}
 
 const router = new VueRouter({
 	mode: 'hash',
@@ -27,7 +29,9 @@ const router = new VueRouter({
 		{path: '/editUser', component: EditUser},
 		{path: '/allUsers', component: AllUsers},
 		{path: '/newFacility', component: NewFacility},
-		{path: '/newContent', component: NewContent}
+		{path: '/newContent', component: NewContent},
+		{path: '/displayContentForEdit', component: DisplayContentsForEdit},
+		{path: '/editContent/:name', component: editContent}
 	  ]
 });
 

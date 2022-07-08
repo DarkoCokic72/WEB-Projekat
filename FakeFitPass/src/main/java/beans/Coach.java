@@ -23,5 +23,9 @@ public class Coach extends User{
 		this.workoutHistory = workoutHistory;
 	}
 	
+	public Coach() {
+		
+	}
+	
 	
 }
