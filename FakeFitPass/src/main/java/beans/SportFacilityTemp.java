@@ -1,12 +1,14 @@
 package beans;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SportFacilityTemp {
 
 	private String name;
 	private TypeOfFacility type;
-	private Content content;
+	private List<Workout> content;
 	private boolean status;
 	private Location location;
 	private String image;
@@ -16,14 +18,15 @@ public class SportFacilityTemp {
 	
 	public SportFacilityTemp() {
 		averageScore = 0;
+		this.content = new ArrayList<Workout>();
 	}
 	
-	public SportFacilityTemp(String name, TypeOfFacility type, Content content, boolean status, Location location,
+	public SportFacilityTemp(String name, TypeOfFacility type, boolean status, Location location,
 			String image, double averageScore, String startTime, String endTime) {
 		super();
 		this.name = name;
 		this.type = type;
-		this.content = content;
+		this.content = new ArrayList<Workout>();
 		this.status = status;
 		this.location = location;
 		this.image = image;
@@ -48,11 +51,11 @@ public class SportFacilityTemp {
 		this.type = type;
 	}
 
-	public Content getContent() {
+	public List<Workout> getContent() {
 		return content;
 	}
 
-	public void setContent(Content content) {
+	public void setContent(List<Workout> content) {
 		this.content = content;
 	}
 

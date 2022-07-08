@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken;
 
 
 import beans.SportFacility;
+import beans.Workout;
 import repository.LogicalEntity;
 import repository.Repository;
 
@@ -26,7 +27,15 @@ public class SportFacilityRepository  extends Repository<SportFacility, String>{
 	}
 
 
+	public Workout getWorkout(String facilityName, String workoutName) {
+		return getOne(facilityName).getWorkout(workoutName);
+	}
 	
+	public void addWorkoutToContent(String facilityName, Workout workout) {
+		SportFacility facility = getOne(facilityName);
+		facility.addWorkout(workout);
+		update(facility.getName(), facility);
+	}
 	
 
 }

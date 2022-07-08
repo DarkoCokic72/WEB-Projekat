@@ -19,6 +19,8 @@ import com.google.gson.GsonBuilder;
 import beans.SportFacility;
 import beans.SportFacilityTemp;
 import beans.User;
+import beans.Workout;
+import beans.WorkoutTemp;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -158,7 +160,7 @@ public class MainApp {
 		
 		post("/newFacility", (req, res) -> {
 			SportFacilityTemp sportFacilityTemp = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm").create().fromJson(req.body(), SportFacilityTemp.class);
-			SportFacility sportFacility = new SportFacility(sportFacilityTemp.getName(), sportFacilityTemp.getType(), null, true, sportFacilityTemp.getLocation(), sportFacilityTemp.getImage(), 0.0, 
+			SportFacility sportFacility = new SportFacility(sportFacilityTemp.getName(), sportFacilityTemp.getType(), true, sportFacilityTemp.getLocation(), sportFacilityTemp.getImage(), 0.0, 
 					LocalDateTime.parse(sportFacilityTemp.getStartTime()), LocalDateTime.parse(sportFacilityTemp.getEndTime()));
 			if (!sportFacilityRepository.addOne(sportFacility)) {
 				return false;
@@ -167,6 +169,34 @@ public class MainApp {
 				managerRepository.setFacilityForManagerUsername(sportFacility, req.queryParams("manager"));
 			}
 			return true;
+		});
+		
+		post("/registerContent", (req, res) -> {
+			System.out.println(req.body());
+			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm").create();
+			WorkoutTemp workoutTemp = gsonReg.fromJson(req.body(), WorkoutTemp.class);
+			
+			Workout workout = new Workout(workoutTemp.getName(),
+					workoutTemp.getType(),
+					null,
+					LocalDateTime.parse(workoutTemp.getDuration()),
+					coachRepository.getCoachByUsername(workoutTemp.getCoach()),
+					workoutTemp.getDescription(),
+					workoutTemp.getImage());
+			
+			String jwt = req.queryParams("jwt");
+			String username = getUsername(jwt);
+			String facilityName = managerRepository.getFacilityName(username);
+			System.out.println(facilityName);
+			if(sportFacilityRepository.getWorkout(facilityName, workout.getName()) != null) {
+				return false;
+			}
+			sportFacilityRepository.addWorkoutToContent(facilityName, workout);
+			return true;
+		});
+		
+		get("/allCoaches", (req, res) -> {
+			return gson.toJson(coachRepository.getAllCoachesUsernames());
 		});
 		
 		get("/checkJWT", (req, res) -> {

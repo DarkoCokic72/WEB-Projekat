@@ -42,4 +42,9 @@ public class ManagerRepository extends Repository<Manager, String> {
 		manager.setSportFacility(sportFacility);
 		update(managerUsername, manager);
 	}
+	
+	public String getFacilityName(String username) {
+		Manager menadzer = getOne(username);
+		return menadzer.getSportFacility().getName();
+	}
 }
