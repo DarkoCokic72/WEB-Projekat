@@ -14,6 +14,6 @@
 	</classpathentry>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry exported="true" kind="lib" path="C:/Users/HP LAPTOP/Desktop/faks/3. godina/Veb programiranje/projekat/WEB-Projekat/FakeFitPass/src/main/webapp/WEB-INF/lib/gson-2.2.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Digital Planet/Desktop/Web projekat 2021-2022/WEB-Projekat/FakeFitPass/src/main/webapp/WEB-INF/lib/gson-2.2.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

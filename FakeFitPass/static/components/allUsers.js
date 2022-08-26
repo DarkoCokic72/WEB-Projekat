@@ -32,7 +32,7 @@ Vue.component('allUsers', {
     },
     methods:{
         "search": function(e){
-            axios.get("/allUsers?nameSearch=" + this.nameSearch + "&surnameSearch=" + this.surnameSearch + "&usernameSearch=" + this.usernameSearch,
+            axios.get("/admin/allUsers?nameSearch=" + this.nameSearch + "&surnameSearch=" + this.surnameSearch + "&usernameSearch=" + this.usernameSearch,
 				    )
 					.then(response => {
 						if(response.data)
@@ -61,7 +61,7 @@ Vue.component('allUsers', {
 		}
     },
     mounted(){
-        axios.get("/allUsers", {
+        axios.get("/admin/allUsers", {
 			headers: {
 			},
 			contentType: "application/json",

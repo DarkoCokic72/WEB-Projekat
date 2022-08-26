@@ -57,7 +57,7 @@ Vue.component('newFacility', {
             else {
                 console.log(this.startTime);
                 axios
-                    .post('/newFacility', {
+                    .post('/admin/newFacility', {
                         name: this.name,
                         type: this.type,
                         location: this.location,
@@ -78,7 +78,7 @@ Vue.component('newFacility', {
         this.location.city = null;
         this.location.postalCode = null;
 
-        axios.get("/freeManagers", {
+        axios.get("/admin/freeManagers", {
             headers: {
             },
             contentType: "application/json",

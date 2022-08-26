@@ -12,12 +12,9 @@ Vue.component('login', {
 			if (JSON.parse(JSON.stringify(response.data))[0] === "-1") {
 				alert("Pogrešni kredencijali.")
 			}
-			else if (JSON.parse(JSON.stringify(response.data))[0] === "-2") {
-				alert("Korisnik blokiran.")
-			}
 			else {
-				localStorage.setItem('jwt', JSON.parse(JSON.stringify(response.data))[0]);
-				localStorage.setItem("role", JSON.parse(JSON.stringify(response.data))[1]);
+				localStorage.setItem('jwt', response.data.jwt);
+				localStorage.setItem("role", response.data.role);
 				event.target.submit();
 			}
 		},

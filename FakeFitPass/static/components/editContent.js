@@ -37,16 +37,14 @@ Vue.component('editContent', {
 				e.preventDefault();
 			} else  {
 				axios
-					.put('/editContent?jwt=' + this.jwt, {
+					.put('/manager/editContent', {
 						name: this.name,
 						type: this.type,
 						description: this.description,
 						duration: this.duration,
                         image: this.image,
                         coach: this.coach
-					}, {params: {
-								jwt: this.jwt
-							}})
+					})
 					.then(response => (this.checkEditResponse(response, e)));
 			}
         },
@@ -77,7 +75,7 @@ Vue.component('editContent', {
     
     },
     mounted(){
-        axios.get("/allCoaches", {
+        axios.get("/manager/allCoaches", {
             headers: {
             },
             contentType: "application/json",
@@ -89,8 +87,8 @@ Vue.component('editContent', {
                 }
             })
 
-        axios.get("/obtainSingleContent?jwt=" + this.jwt + "&name=" + this.name).
-            then(response => {this.editResponse(response)})
+        axios.get("/manager/obtainSingleContent?name="+ this.name)
+            .then(response => {this.editResponse(response)})
     },
     template: `
     <div> 

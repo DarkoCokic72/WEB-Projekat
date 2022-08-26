@@ -37,16 +37,14 @@ Vue.component('newContent', {
 				e.preventDefault();
 			} else  {
 				axios
-					.post('/registerContent', {
+					.post('/manager/registerContent', {
 						name: this.name,
 						type: this.type,
 						description: this.description,
 						duration: this.duration,
                         image: this.image,
                         coach: this.coach
-					}, {params: {
-								jwt: this.jwt
-							}})
+					})
 					.then(response => (this.checkRegistrationResponse(response, e)));
 			}
         },
@@ -62,7 +60,7 @@ Vue.component('newContent', {
 		}
     },
     mounted(){
-        axios.get("/allCoaches", {
+        axios.get("manager/allCoaches", {
             headers: {
             },
             contentType: "application/json",

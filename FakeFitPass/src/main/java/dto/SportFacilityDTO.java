@@ -1,10 +1,14 @@
-package beans;
+package dto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SportFacilityTemp {
+import beans.Location;
+import beans.TypeOfFacility;
+import beans.Workout;
+
+public class SportFacilityDTO {
 
 	private String name;
 	private TypeOfFacility type;
@@ -16,12 +20,12 @@ public class SportFacilityTemp {
 	private String startTime;
 	private String endTime;
 	
-	public SportFacilityTemp() {
+	public SportFacilityDTO() {
 		averageScore = 0;
 		this.content = new ArrayList<Workout>();
 	}
 	
-	public SportFacilityTemp(String name, TypeOfFacility type, boolean status, Location location,
+	public SportFacilityDTO(String name, TypeOfFacility type, boolean status, Location location,
 			String image, double averageScore, String startTime, String endTime) {
 		super();
 		this.name = name;

@@ -3,6 +3,7 @@ package beans;
 import java.time.LocalDateTime;
 
 public class Workout {
+	private String id;
 	private String name;
 	private TypeOfWorkout type;
 	private SportFacility sportFacility;
@@ -13,9 +14,10 @@ public class Workout {
 	
 	public Workout() {}
 	
-	public Workout(String name, TypeOfWorkout type, SportFacility sportFacility, LocalDateTime duration, Coach coach,
+	public Workout(String id, String name, TypeOfWorkout type, SportFacility sportFacility, LocalDateTime duration, Coach coach,
 			String description, String image) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.type = type;
 		this.sportFacility = sportFacility;
@@ -23,6 +25,25 @@ public class Workout {
 		this.coach = coach;
 		this.description = description;
 		this.image = image;
+	}
+	
+	public Workout(Workout workout) {
+		this.id = workout.getId();
+		this.name = workout.getName();
+		this.type = workout.getType();
+		this.sportFacility = workout.getSportFacility();
+		this.duration = workout.getDuration();
+		this.coach = workout.getCoach();
+		this.description = workout.getDescription();
+		this.image = workout.getImage();
+	}
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getName() {

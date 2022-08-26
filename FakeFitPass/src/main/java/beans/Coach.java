@@ -4,6 +4,10 @@ import java.util.Date;
 
 public class Coach extends User{
 	private WorkoutHistory workoutHistory;
+	
+	public Coach() {
+		
+	}
 
 	public Coach(String username, String password, String name, String surname, Gender gender, Date dateOfBirth,
 			WorkoutHistory workoutHistory) {
@@ -21,10 +25,6 @@ public class Coach extends User{
 
 	public void setWorkoutHistory(WorkoutHistory workoutHistory) {
 		this.workoutHistory = workoutHistory;
-	}
-	
-	public Coach() {
-		
 	}
 	
 	

@@ -3,6 +3,8 @@ import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.put;
+import static spark.Spark.before;
+import static spark.Spark.halt;
 import static spark.Spark.staticFiles;
 
 import java.io.File;
@@ -11,18 +13,23 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import beans.Coach;
+import beans.IdGenerator;
 import beans.Manager;
 import beans.SportFacility;
-import beans.SportFacilityTemp;
 import beans.User;
 import beans.Workout;
-import beans.WorkoutTemp;
+import beans.WorkoutHistory;
+import dto.LoggedInUserDTO;
+import dto.SportFacilityDTO;
+import dto.WorkoutDTO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -33,8 +40,12 @@ import repository.CoachRepository;
 import repository.CustomerRepository;
 import repository.ManagerRepository;
 import repository.SportFacilityRepository;
+import repository.WorkoutHistoryRepository;
+import repository.WorkoutRepository;
 import service.SportFacilityService;
 import service.UserService;
+import service.WorkoutHistoryService;
+import service.WorkoutService;
 
 public class MainApp {
 	private static Gson gson = new Gson();
@@ -45,7 +56,12 @@ public class MainApp {
 	private static ManagerRepository managerRepository = new ManagerRepository();
 	private static AdministratorRepository administratorRepository = new AdministratorRepository();
 	private static SportFacilityService sportFacilityService = new SportFacilityService();
+	private static WorkoutHistoryService workoutHistoryService = new WorkoutHistoryService();
+	private static WorkoutHistoryRepository workoutHistoryRepository = new WorkoutHistoryRepository();
+	private static WorkoutRepository workoutRepository = new WorkoutRepository();
+	private static WorkoutService workoutService = new WorkoutService();
 	private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+	private static IdGenerator idGenerator = new IdGenerator();
 
 	
 	private static String getUsername(String auth) {
@@ -55,6 +71,14 @@ public class MainApp {
 		Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
 		return claims.getBody().getSubject();
 	}
+	
+	private static String getRole(String auth) {
+        if (auth == null)
+            return "";
+        String jwt = auth;
+        Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
+        return (String) claims.getBody().get("role");
+	}
 
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
@@ -62,27 +86,69 @@ public class MainApp {
 
 		staticFiles.externalLocation(new File("./static").getCanonicalPath());
 		
+		before("/admin/*", (request, response) -> {
+            String auth = request.headers("Authorization");
+            String username = getUsername(auth);
+            String role = getRole(auth);
+            if (username.equals("") || !role.equals("Administrator"))
+                halt(401, "Go Away!");
+           });
+		
+		before("/manager/*", (request, response) -> {
+            String auth = request.headers("Authorization");
+            String username = getUsername(auth);
+            String role = getRole(auth);
+            if (username.equals("") || !role.equals("Manager"))
+                halt(401, "Go Away!");
+           });
+		
+		before("/coach/*", (request, response) -> {
+            String auth = request.headers("Authorization");
+            String username = getUsername(auth);
+            String role = getRole(auth);
+            if (username.equals("") || !role.equals("Coach"))
+                halt(401, "Go Away!");
+           });
+		
+		before("/customer/*", (request, response) -> {
+            String auth = request.headers("Authorization");
+            String username = getUsername(auth);
+            String role = getRole(auth);
+            if (username.equals("") || !role.equals("Customer"))
+                halt(401, "Go Away!");
+           });
+		
 		post("/login", (req, res) -> {
-			String username = req.queryParams("username");
-			String password = req.queryParams("password");
-			String jws = null;
-			List<String> response = new ArrayList<String>();
-			
-			User user = userService.findByID(username);
-			if (user == null || !user.getPassword().equals(password)) {
-				jws = "-1";
-				response.add(jws);
-			}  else {
-				jws = Jwts.builder().setSubject(username)
-						.setExpiration(new Date(new Date().getTime() + 100000 * 10L)).setIssuedAt(new Date())
-						.signWith(key).compact();
-				response.add(jws);
-				response.add(user.getRoleName());
-			}
+            String username = req.queryParams("username");
+            String password = req.queryParams("password");
+            String jws = null;
+            LoggedInUserDTO dto = new LoggedInUserDTO();
+            
+            workoutService.add();
+            
 
-			return gson.toJson(response);
-			
-		});
+            User user = userService.findByID(username);
+            if (user == null || !user.getPassword().equals(password)) {
+                jws = "-1";
+                dto.setJwt(jws);
+            }  else {
+
+                Map<String, Object> claims = new HashMap<>();
+                claims.put("role", user.getRoleName());
+
+
+                jws = Jwts.builder()
+                        .setClaims(claims)
+                        .setSubject(username)
+                        .setExpiration(new Date(new Date().getTime() + 100000 * 10L)).setIssuedAt(new Date())
+                        .signWith(key).compact();
+                dto.setJwt(jws);
+                dto.setRole(user.getRoleName());
+            }
+
+            return gson.toJson(dto);
+
+        });
 		
 		post("/registration", (req, res) -> {
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
@@ -122,14 +188,14 @@ public class MainApp {
 		
 		get("/obtainData", (req, res) -> {
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-			String username = getUsername(req.queryParams("jwt"));
+			String username = getUsername(req.headers("Authorization"));
 			User user = userService.findByID(username);
 			return gsonReg.toJson(user);
 		});
 		
-		get("/obtainContent", (req, res) -> {
+		get("/manager/obtainContent", (req, res) -> {
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
-			String username = getUsername(req.queryParams("jwt"));
+			String username = getUsername(req.headers("Authorization"));
 			Manager manager = managerRepository.getOne(username);
 			String facilityName = manager.getSportFacility().getName();
 			
@@ -137,9 +203,9 @@ public class MainApp {
 			return gsonReg.toJson(content);
 		});
 		
-		get("/obtainSingleContent", (req, res) -> {
+		get("/manager/obtainSingleContent", (req, res) -> {
 			Gson gsonReg = new GsonBuilder().create();
-			String username = getUsername(req.queryParams("jwt"));
+			String username = getUsername(req.headers("Authorization"));
 			String contentName = req.queryParams("name");
 			
 			Manager manager = managerRepository.getOne(username);
@@ -149,14 +215,13 @@ public class MainApp {
 			
 			DateTimeFormatter formater = DateTimeFormatter.ISO_DATE_TIME;
 			
-			WorkoutTemp workoutTemp = new WorkoutTemp(workout.getName(), workout.getType(), workout.getSportFacility(), workout.getDuration().format(formater), workout.getCoach().getUsername(), workout.getDescription(), workout.getImage());
+			WorkoutDTO workoutDTO = new WorkoutDTO(workout.getName(), workout.getType(), workout.getSportFacility(), workout.getDuration().format(formater), workout.getCoach().getUsername(), workout.getDescription(), workout.getImage());
 			
-			return gsonReg.toJson(workoutTemp);
+			return gsonReg.toJson(workoutDTO);
 		});
 		
 		put("/editData", (req, res) -> {
-			String jwt = req.queryParams("jwt");
-			String username = getUsername(jwt);
+			String username = getUsername(req.headers("Authorization"));
 
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
 			User editedUser = gsonReg.fromJson(req.body(), User.class);
@@ -172,7 +237,7 @@ public class MainApp {
 			return true;
 		});
 		
-		get("/allUsers", (req, res) -> {
+		get("/admin/allUsers", (req, res) -> {
 			List<User> unfiltered = userService.getAll();
 			String nameSearch = req.queryParams("nameSearch");
 			String surnameSearch = req.queryParams("surnameSearch");
@@ -183,14 +248,14 @@ public class MainApp {
 			return gson.toJson(userService.filterUsers(unfiltered, nameSearch, surnameSearch, usernameSearch));
 		});
 		
-		get("/freeManagers", (req, res) -> {
+		get("/admin/freeManagers", (req, res) -> {
 			return gson.toJson(managerRepository.getFreeManagersUsernames());
 		});
 		
-		post("/newFacility", (req, res) -> {
-			SportFacilityTemp sportFacilityTemp = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm").create().fromJson(req.body(), SportFacilityTemp.class);
-			SportFacility sportFacility = new SportFacility(sportFacilityTemp.getName(), sportFacilityTemp.getType(), true, sportFacilityTemp.getLocation(), sportFacilityTemp.getImage(), 0.0, 
-					LocalDateTime.parse(sportFacilityTemp.getStartTime()), LocalDateTime.parse(sportFacilityTemp.getEndTime()));
+		post("/admin/newFacility", (req, res) -> {
+			SportFacilityDTO sportFacilityDTO = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm").create().fromJson(req.body(), SportFacilityDTO.class);
+			SportFacility sportFacility = new SportFacility(sportFacilityDTO.getName(), sportFacilityDTO.getType(), true, sportFacilityDTO.getLocation(), sportFacilityDTO.getImage(), 0.0, 
+					LocalDateTime.parse(sportFacilityDTO.getStartTime()), LocalDateTime.parse(sportFacilityDTO.getEndTime()));
 			if (!sportFacilityRepository.addOne(sportFacility)) {
 				return false;
 			}
@@ -200,28 +265,26 @@ public class MainApp {
 			return true;
 		});
 		
-		post("/registerContent", (req, res) -> {
-			System.out.println(req.body());
+		post("/manager/registerContent", (req, res) -> {
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm").create();
-			WorkoutTemp workoutTemp = gsonReg.fromJson(req.body(), WorkoutTemp.class);
+			WorkoutDTO workoutDTO = gsonReg.fromJson(req.body(), WorkoutDTO.class);
 			
 			Coach c;
-			if(workoutTemp.getCoach().equals("")) {
+			if(workoutDTO.getCoach().equals("")) {
 				c= new Coach();
 			} else {
-				c = coachRepository.getCoachByUsername(workoutTemp.getCoach());
+				c = coachRepository.getCoachByUsername(workoutDTO.getCoach());
 			}
 			
-			Workout workout = new Workout(workoutTemp.getName(),
-					workoutTemp.getType(),
+			Workout workout = new Workout(idGenerator.generateRandomKey(4),workoutDTO.getName(),
+					workoutDTO.getType(),
 					null,
-					LocalDateTime.parse(workoutTemp.getDuration()),
+					LocalDateTime.parse(workoutDTO.getDuration()),
 					c,
-					workoutTemp.getDescription(),
-					workoutTemp.getImage());
+					workoutDTO.getDescription(),
+					workoutDTO.getImage());
 			
-			String jwt = req.queryParams("jwt");
-			String username = getUsername(jwt);
+			String username = getUsername(req.headers("Authorization"));
 			String facilityName = managerRepository.getFacilityName(username);
 			
 			if(sportFacilityRepository.getWorkout(facilityName, workout.getName()) != null) {
@@ -231,27 +294,26 @@ public class MainApp {
 			return true;
 		});
 		
-		put("/editContent", (req, res) -> {
-			String jwt = req.queryParams("jwt");
-			String username = getUsername(jwt);
+		put("/manager/editContent", (req, res) -> {
+			String username = getUsername(req.headers("Authorization"));
 			
 			Gson gsonReg = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm").create();
-			WorkoutTemp workoutTemp = gsonReg.fromJson(req.body(), WorkoutTemp.class);
+			WorkoutDTO workoutDTO = gsonReg.fromJson(req.body(), WorkoutDTO.class);
 			
 			Coach c;
-			if(workoutTemp.getCoach().equals("")) {
+			if(workoutDTO.getCoach().equals("")) {
 				c= new Coach();
 			} else {
-				c = coachRepository.getCoachByUsername(workoutTemp.getCoach());
+				c = coachRepository.getCoachByUsername(workoutDTO.getCoach());
 			}
 			
-			Workout workout = new Workout(workoutTemp.getName(),
-					workoutTemp.getType(),
+			Workout workout = new Workout(idGenerator.generateRandomKey(4),workoutDTO.getName(),
+					workoutDTO.getType(),
 					null,
-					LocalDateTime.parse(workoutTemp.getDuration()),
+					LocalDateTime.parse(workoutDTO.getDuration()),
 					c,
-					workoutTemp.getDescription(),
-					workoutTemp.getImage());
+					workoutDTO.getDescription(),
+					workoutDTO.getImage());
 			
 			String facilityName = managerRepository.getFacilityName(username);
 			
@@ -259,17 +321,16 @@ public class MainApp {
 			return true;
 		});
 		
-		get("/allCoaches", (req, res) -> {
+		get("/manager/allCoaches", (req, res) -> {
 			return gson.toJson(coachRepository.getAllCoachesUsernames());
 		});
 		
-		get("/checkJWT", (req, res) -> {
-			String auth = req.headers("Authorization");
-			String username = getUsername(auth);
-			if (username.equals(""))
-				return false;
-			return true;
+		get("/customer/allWorkouts", (req, res) -> {
+			res.type("application/json");
+			getUsername(req.headers("Authorization"));
+			return gson.toJson(workoutHistoryService.getAllWorkoutsInLastMonth(getUsername(req.headers("Authorization"))));
 		});
+		
 	}
 
 }

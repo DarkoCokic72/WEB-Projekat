@@ -11,7 +11,7 @@ Vue.component('displayContentForEdit', {
         }
     },
     mounted(){
-        axios.get('/obtainContent?jwt=' + this.jwt, {})
+        axios.get('/manager/obtainContent', {})
             .then(response => {
                 this.contents = response.data
             });

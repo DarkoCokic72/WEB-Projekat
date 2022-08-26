@@ -28,7 +28,7 @@ Vue.component('editUser',{
             }else{
                 this.gender = "female";
             }
-            axios.put('/editData?jwt=' + this.jwt, {
+            axios.put('/editData', {
 						username: this.username,
 						password: this.password,
 						name: this.name,
@@ -63,7 +63,7 @@ Vue.component('editUser',{
     },
     mounted() {
 			axios
-				.get('/obtainData?jwt=' + this.jwt, {})
+				.get('/obtainData', {})
 				.then(response => (this.editResponse(response)));
 	},
     template:

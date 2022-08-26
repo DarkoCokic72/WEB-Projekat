@@ -1,6 +1,10 @@
-package beans;
+package dto;
 
-public class WorkoutTemp {
+import beans.SportFacility;
+import beans.TypeOfWorkout;
+
+public class WorkoutDTO {
+
 	private String name;
 	private TypeOfWorkout type;
 	private SportFacility sportFacility;
@@ -9,7 +13,7 @@ public class WorkoutTemp {
 	private String description;
 	private String image;
 	
-	public WorkoutTemp(String name, TypeOfWorkout type, SportFacility sportFacility, String duration, String coach,
+	public WorkoutDTO(String name, TypeOfWorkout type, SportFacility sportFacility, String duration, String coach,
 			String description, String image) {
 		super();
 		this.name = name;
@@ -76,5 +80,4 @@ public class WorkoutTemp {
 	public void setImage(String image) {
 		this.image = image;
 	}
-	
 }
