@@ -327,8 +327,12 @@ public class MainApp {
 		
 		get("/customer/allWorkouts", (req, res) -> {
 			res.type("application/json");
-			getUsername(req.headers("Authorization"));
 			return gson.toJson(workoutHistoryService.getAllWorkoutsInLastMonth(getUsername(req.headers("Authorization"))));
+		});
+		
+		get("/coach/allWorkouts", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(workoutService.getAllWorkoutsForCoach(getUsername(req.headers("Authorization"))));
 		});
 		
 	}

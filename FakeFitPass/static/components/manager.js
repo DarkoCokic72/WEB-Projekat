@@ -20,8 +20,8 @@ Vue.component('manager', {
 		<h1>Dobro došli menadžeru!</h1>
 		<a href="/#/" v-on:click="logout()">Odjava</a><br/>
 		<a href="/#/editUser">Pregled i izmena ličnih podataka</a><br/>
-		<a href="/#/newContent">Dodavanje novog sadrzaja</a><br />
-		<a href="/#/displayContentForEdit">Prikaz sadrzaja za izmenu</a><br />
+		<a href="/#/newContent">Dodavanje novog sadržaja</a><br/>
+		<a href="/#/displayContentForEdit">Prikaz sadržaja za izmenu</a><br/>
 	</div>                   
 `
 })

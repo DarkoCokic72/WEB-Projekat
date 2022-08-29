@@ -14,6 +14,7 @@ const NewContent = {template: '<newContent/>'}
 const DisplayContentsForEdit = {template: '<displayContentForEdit/>'}
 const EditContent = {template: '<editContent/>'}
 const CustomerTrainingsView = {template: '<customerTrainingsView/>'}
+const CoachTrainingsView = {template: '<coachTrainingsView/>'}
 
 
 const router = new VueRouter({
@@ -34,7 +35,8 @@ const router = new VueRouter({
 		{path: '/newContent',name: 'NewContent', component: NewContent},
 		{path: '/displayContentForEdit',name: 'DisplayContentsForEdit', component: DisplayContentsForEdit},
 		{path: '/editContent/:name',name: 'EditContent', component: EditContent},
-    {path: '/customerTrainingsView',name: 'CustomerTrainingsView', component: CustomerTrainingsView}
+    {path: '/customerTrainingsView',name: 'CustomerTrainingsView', component: CustomerTrainingsView},
+    {path: '/coachTrainingsView',name: 'CoachTrainingsView', component: CoachTrainingsView}
 	  ]
 });
 
@@ -42,7 +44,7 @@ const protectedRoutes = ['EditUser']
 const adminRoutes = ['Admin', 'EditUser', 'AllUsers', 'NewFacility']
 const managerRoutes = ['Manager', 'NewContent', 'EditContent', 'DisplayContentsForEdit']
 const customerRoutes = ['Customer', 'CustomerTrainingsView']
-const coachRoutes = ['Coach']
+const coachRoutes = ['Coach', 'CoachTrainingsView']
 router.beforeEach((to,from,next) => {
   if(protectedRoutes.includes(to.name)){
     if(window.localStorage.getItem("jwt")!==''){
