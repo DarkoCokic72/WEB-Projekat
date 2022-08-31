@@ -32,4 +32,14 @@ public class WorkoutService {
 		}
 		return workouts;
 	}
+	
+	public List<Workout> getAllWorkoutsForManager(String sportFacilityName){
+		List<Workout> workouts = new ArrayList<Workout>();
+		for(Workout workout: workoutRepository.getAll()) {
+			if(workout.getSportFacility().getName().equals(sportFacilityName)) {
+				workouts.add(workout);
+			}
+		}
+		return workouts;
+	}
 }

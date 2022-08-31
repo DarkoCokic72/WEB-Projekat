@@ -15,6 +15,7 @@ const DisplayContentsForEdit = {template: '<displayContentForEdit/>'}
 const EditContent = {template: '<editContent/>'}
 const CustomerTrainingsView = {template: '<customerTrainingsView/>'}
 const CoachTrainingsView = {template: '<coachTrainingsView/>'}
+const ManagerTrainingsView = {template: '<managerTrainingsView/>'}
 
 
 const router = new VueRouter({
@@ -36,13 +37,14 @@ const router = new VueRouter({
 		{path: '/displayContentForEdit',name: 'DisplayContentsForEdit', component: DisplayContentsForEdit},
 		{path: '/editContent/:name',name: 'EditContent', component: EditContent},
     {path: '/customerTrainingsView',name: 'CustomerTrainingsView', component: CustomerTrainingsView},
-    {path: '/coachTrainingsView',name: 'CoachTrainingsView', component: CoachTrainingsView}
+    {path: '/coachTrainingsView',name: 'CoachTrainingsView', component: CoachTrainingsView},
+    {path: '/managerTrainingsView',name: 'ManagerTrainingsView', component: ManagerTrainingsView}
 	  ]
 });
 
 const protectedRoutes = ['EditUser']
 const adminRoutes = ['Admin', 'EditUser', 'AllUsers', 'NewFacility']
-const managerRoutes = ['Manager', 'NewContent', 'EditContent', 'DisplayContentsForEdit']
+const managerRoutes = ['Manager', 'NewContent', 'EditContent', 'DisplayContentsForEdit', 'ManagerTrainingsView']
 const customerRoutes = ['Customer', 'CustomerTrainingsView']
 const coachRoutes = ['Coach', 'CoachTrainingsView']
 router.beforeEach((to,from,next) => {

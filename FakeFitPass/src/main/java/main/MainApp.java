@@ -42,6 +42,7 @@ import repository.ManagerRepository;
 import repository.SportFacilityRepository;
 import repository.WorkoutHistoryRepository;
 import repository.WorkoutRepository;
+import service.ManagerService;
 import service.SportFacilityService;
 import service.UserService;
 import service.WorkoutHistoryService;
@@ -54,6 +55,7 @@ public class MainApp {
 	private static CustomerRepository customerRepository = new CustomerRepository();
 	private static CoachRepository coachRepository = new CoachRepository();
 	private static ManagerRepository managerRepository = new ManagerRepository();
+	private static ManagerService managerService = new ManagerService();
 	private static AdministratorRepository administratorRepository = new AdministratorRepository();
 	private static SportFacilityService sportFacilityService = new SportFacilityService();
 	private static WorkoutHistoryService workoutHistoryService = new WorkoutHistoryService();
@@ -333,6 +335,11 @@ public class MainApp {
 		get("/coach/allWorkouts", (req, res) -> {
 			res.type("application/json");
 			return gson.toJson(workoutService.getAllWorkoutsForCoach(getUsername(req.headers("Authorization"))));
+		});
+		
+		get("/manager/allWorkouts", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(workoutService.getAllWorkoutsForManager(managerService.findSportFacilityByManager(getUsername(req.headers("Authorization")))));
 		});
 		
 	}
