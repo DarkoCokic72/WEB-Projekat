@@ -42,4 +42,32 @@ public class WorkoutService {
 		}
 		return workouts;
 	}
+	
+	public List<Workout> getAllPersonalWorkouts(){
+		List<Workout> workouts = new ArrayList<Workout>();
+		for(Workout workout: workoutRepository.getAll()) {
+			if(workout.getType().equals(TypeOfWorkout.Personal)) {
+				workouts.add(workout);
+			}
+		}
+		return workouts;
+	}
+	
+	public Workout findWorkoutById(String id) {
+		for(Workout workout: workoutRepository.getAll()) {
+			if(workout.getId().equals(id)) {
+				return workout;
+			}
+		}
+		return null;
+	}
+	
+	public String findCoachOfWorkoutById(String id) {
+		for(Workout workout: workoutRepository.getAll()) {
+			if(workout.getId().equals(id)) {
+				return workout.getCoach().getUsername();
+			}
+		}
+		return null;
+	}
 }

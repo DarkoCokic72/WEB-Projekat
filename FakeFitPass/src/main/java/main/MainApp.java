@@ -3,6 +3,7 @@ import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.put;
+import static spark.Spark.delete;
 import static spark.Spark.before;
 import static spark.Spark.halt;
 import static spark.Spark.staticFiles;
@@ -28,6 +29,8 @@ import beans.User;
 import beans.Workout;
 import beans.WorkoutHistory;
 import dto.LoggedInUserDTO;
+import dto.ScheduledWorkoutDTO;
+import dto.SchedulingWorkoutDTO;
 import dto.SportFacilityDTO;
 import dto.WorkoutDTO;
 import io.jsonwebtoken.Claims;
@@ -43,6 +46,7 @@ import repository.SportFacilityRepository;
 import repository.WorkoutHistoryRepository;
 import repository.WorkoutRepository;
 import service.ManagerService;
+import service.ScheduledWorkoutService;
 import service.SportFacilityService;
 import service.UserService;
 import service.WorkoutHistoryService;
@@ -62,6 +66,7 @@ public class MainApp {
 	private static WorkoutHistoryRepository workoutHistoryRepository = new WorkoutHistoryRepository();
 	private static WorkoutRepository workoutRepository = new WorkoutRepository();
 	private static WorkoutService workoutService = new WorkoutService();
+	private static ScheduledWorkoutService scheduledWorkoutService = new ScheduledWorkoutService();
 	private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 	private static IdGenerator idGenerator = new IdGenerator();
 
@@ -340,6 +345,37 @@ public class MainApp {
 		get("/manager/allWorkouts", (req, res) -> {
 			res.type("application/json");
 			return gson.toJson(workoutService.getAllWorkoutsForManager(managerService.findSportFacilityByManager(getUsername(req.headers("Authorization")))));
+		});
+		
+		get("/customer/allPersonalWorkouts", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(workoutService.getAllPersonalWorkouts());
+		});
+		
+		post("/customer/scheduleTraining", (req, res) -> {
+			res.type("application/json");
+			Gson gson = new GsonBuilder().create();
+			SchedulingWorkoutDTO schedulingWorkoutDTO = gson.fromJson(req.body(), SchedulingWorkoutDTO.class);
+			ScheduledWorkoutDTO scheduledWorkoutDTO = new ScheduledWorkoutDTO(idGenerator.generateRandomKey(4), getUsername(req.headers("Authorization")),
+					userService.findByID(getUsername(req.headers("Authorization"))).getName(), userService.findByID(getUsername(req.headers("Authorization"))).getSurname(), 
+					workoutService.findWorkoutById(schedulingWorkoutDTO.getId()), LocalDateTime.parse(schedulingWorkoutDTO.getDateTimeOfWorkout()));
+			if(scheduledWorkoutService.findWorkoutByCoachAndTime(workoutService.findCoachOfWorkoutById(schedulingWorkoutDTO.getId()), scheduledWorkoutDTO.getDateTimeOfWorkout()) == true) {
+				return false;
+			}
+			scheduledWorkoutService.addScheduledWorkout(scheduledWorkoutDTO);
+			return true;
+			
+		});
+		
+		get("/coach/allScheduledWorkouts", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(scheduledWorkoutService.getAllScheduledWorkouts(getUsername(req.headers("Authorization"))));
+		});
+		
+		delete("/coach/cancelWorkout", (req, res) -> {
+			res.type("application/json");
+			String id = req.queryParams("id");
+			return gson.toJson(scheduledWorkoutService.cancelWorkout(id));
 		});
 		
 	}

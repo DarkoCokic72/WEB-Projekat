@@ -20,6 +20,7 @@ Vue.component('coach', {
 		<a href="/#/" v-on:click="logout()">Odjava</a><br/>
 		<a href="/#/editUser">Pregled i izmena ličnih podataka</a><br/>
 		<a href="/#/coachTrainingsView">Pregled svih treninga</a><br/>
+		<a href="/#/scheduledTrainingsViewAndDelete">Pregled i otkazivanje personalnih treninga</a><br/>
 	</div>
 `
 })

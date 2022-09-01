@@ -33,7 +33,7 @@ Vue.component('newContent', {
 			
 
 			if (!this.name || !this.type || !this.image) {
-				alert("Morate navesto naziv, tip i sliku!")
+				alert("Morate navesti naziv, tip i sliku!")
 				e.preventDefault();
 			} else  {
 				axios

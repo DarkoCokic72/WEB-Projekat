@@ -16,6 +16,8 @@ const EditContent = {template: '<editContent/>'}
 const CustomerTrainingsView = {template: '<customerTrainingsView/>'}
 const CoachTrainingsView = {template: '<coachTrainingsView/>'}
 const ManagerTrainingsView = {template: '<managerTrainingsView/>'}
+const SchedulingTraining = {template: '<schedulingTraining/>'}
+const ScheduledTrainingsViewAndDelete = {template: '<scheduledTrainingsViewAndDelete/>'}
 
 
 const router = new VueRouter({
@@ -38,15 +40,17 @@ const router = new VueRouter({
 		{path: '/editContent/:name',name: 'EditContent', component: EditContent},
     {path: '/customerTrainingsView',name: 'CustomerTrainingsView', component: CustomerTrainingsView},
     {path: '/coachTrainingsView',name: 'CoachTrainingsView', component: CoachTrainingsView},
-    {path: '/managerTrainingsView',name: 'ManagerTrainingsView', component: ManagerTrainingsView}
+    {path: '/managerTrainingsView',name: 'ManagerTrainingsView', component: ManagerTrainingsView},
+    {path: '/schedulingTraining',name: 'SchedulingTraining', component: SchedulingTraining},
+    {path: '/scheduledTrainingsViewAndDelete',name: 'ScheduledTrainingsViewAndDelete', component: ScheduledTrainingsViewAndDelete}
 	  ]
 });
 
 const protectedRoutes = ['EditUser']
 const adminRoutes = ['Admin', 'EditUser', 'AllUsers', 'NewFacility']
 const managerRoutes = ['Manager', 'NewContent', 'EditContent', 'DisplayContentsForEdit', 'ManagerTrainingsView']
-const customerRoutes = ['Customer', 'CustomerTrainingsView']
-const coachRoutes = ['Coach', 'CoachTrainingsView']
+const customerRoutes = ['Customer', 'CustomerTrainingsView', 'SchedulingTraining']
+const coachRoutes = ['Coach', 'CoachTrainingsView', 'ScheduledTrainingsViewAndDelete']
 router.beforeEach((to,from,next) => {
   if(protectedRoutes.includes(to.name)){
     if(window.localStorage.getItem("jwt")!==''){
