@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import beans.Customer;
 import beans.TypeOfWorkout;
 import beans.Workout;
 import beans.WorkoutHistory;
@@ -36,5 +37,26 @@ public class WorkoutHistoryService {
 			}
 		}
 		return historyOfWorkoutsInLastMonth;
+	}
+	
+	public List<Customer> getCustomersBySportFacilityName(String sportFacilityName){
+		List<Customer> customers = new ArrayList<Customer>();
+		for(WorkoutHistory workoutHistory: workoutHistoryRepository.getAll()) {
+			if(workoutHistory.getWorkout().getSportFacility().getName().equals(sportFacilityName)) {
+				if(isCustomerAlreadyInCustomers(workoutHistory.getCustomer().getUsername(), customers)) {
+					customers.add(workoutHistory.getCustomer());
+				}
+			}
+		}
+		return customers;
+	}
+	
+	private boolean isCustomerAlreadyInCustomers(String username, List<Customer> customers) {
+		for(Customer customer: customers) {
+			if(username.equals(customer.getUsername())) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

@@ -46,7 +46,8 @@ Vue.component('scheduledTrainingsViewAndDelete', {
                         <td>{{w.name}} {{w.surname}}</td>
                         <td>{{w.workout.name}}</td>
                         <td>{{w.workout.sportFacility.name}}</td>
-                        <td>{{w.dateTimeOfWorkout.date.day}}.{{w.dateTimeOfWorkout.date.month}}.{{w.dateTimeOfWorkout.date.year}} {{w.dateTimeOfWorkout.time.hour}}:{{w.dateTimeOfWorkout.time.minute}}</td>
+                        <td v-if="w.dateTimeOfWorkout.time.minute === 0">{{w.dateTimeOfWorkout.date.day}}.{{w.dateTimeOfWorkout.date.month}}.{{w.dateTimeOfWorkout.date.year}} {{w.dateTimeOfWorkout.time.hour}}:{{w.dateTimeOfWorkout.time.minute}}0</td>
+                        <td v-else>{{w.dateTimeOfWorkout.date.day}}.{{w.dateTimeOfWorkout.date.month}}.{{w.dateTimeOfWorkout.date.year}} {{w.dateTimeOfWorkout.time.hour}}:{{w.dateTimeOfWorkout.time.minute}}</td>
                         <td v-if="w.isVisible === false"><button @click="cancelWorkout(w.id)">Otkaži</button></td>
                     </tr>
                 </tbody>

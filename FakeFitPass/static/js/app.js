@@ -18,6 +18,7 @@ const CoachTrainingsView = {template: '<coachTrainingsView/>'}
 const ManagerTrainingsView = {template: '<managerTrainingsView/>'}
 const SchedulingTraining = {template: '<schedulingTraining/>'}
 const ScheduledTrainingsViewAndDelete = {template: '<scheduledTrainingsViewAndDelete/>'}
+const ManagerSportFacilityView = {template: '<managerSportFacilityView/>'}
 
 
 const router = new VueRouter({
@@ -42,13 +43,14 @@ const router = new VueRouter({
     {path: '/coachTrainingsView',name: 'CoachTrainingsView', component: CoachTrainingsView},
     {path: '/managerTrainingsView',name: 'ManagerTrainingsView', component: ManagerTrainingsView},
     {path: '/schedulingTraining',name: 'SchedulingTraining', component: SchedulingTraining},
-    {path: '/scheduledTrainingsViewAndDelete',name: 'ScheduledTrainingsViewAndDelete', component: ScheduledTrainingsViewAndDelete}
+    {path: '/scheduledTrainingsViewAndDelete',name: 'ScheduledTrainingsViewAndDelete', component: ScheduledTrainingsViewAndDelete},
+    {path: '/managerSportFacilityView',name: 'ManagerSportFacilityView', component: ManagerSportFacilityView}
 	  ]
 });
 
 const protectedRoutes = ['EditUser']
 const adminRoutes = ['Admin', 'EditUser', 'AllUsers', 'NewFacility']
-const managerRoutes = ['Manager', 'NewContent', 'EditContent', 'DisplayContentsForEdit', 'ManagerTrainingsView']
+const managerRoutes = ['Manager', 'NewContent', 'EditContent', 'DisplayContentsForEdit', 'ManagerTrainingsView', 'ManagerSportFacilityView']
 const customerRoutes = ['Customer', 'CustomerTrainingsView', 'SchedulingTraining']
 const coachRoutes = ['Coach', 'CoachTrainingsView', 'ScheduledTrainingsViewAndDelete']
 router.beforeEach((to,from,next) => {

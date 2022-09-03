@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import beans.Coach;
 import beans.TypeOfWorkout;
 import beans.Workout;
 import repository.CoachRepository;
@@ -69,5 +70,15 @@ public class WorkoutService {
 			}
 		}
 		return null;
+	}
+	
+	public List<Coach> getCoachesBySportFacilityName(String sportFacilityName){
+		List<Coach> coaches = new ArrayList<Coach>();
+		for(Workout workout: workoutRepository.getAll()) {
+			if(workout.getSportFacility().getName().equals(sportFacilityName)) {
+				coaches.add(workout.getCoach());
+			}
+		}
+		return coaches;
 	}
 }

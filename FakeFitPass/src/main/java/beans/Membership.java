@@ -9,21 +9,19 @@ public class Membership {
 	private Date dateOfPayment;
 	private LocalDateTime periodOfValidity;
 	private double price;
-	private Customer customer;
 	private boolean status;
 	private int numberOfAppointments; //broj termina
 	
 	public Membership() {}
 	
 	public Membership(String membershipID, TypeOfMembership type, Date dateOfPayment, LocalDateTime periodOfValidity,
-			double price, Customer customer, boolean status, int numberOfAppointments) {
+			double price, boolean status, int numberOfAppointments) {
 		super();
 		this.membershipID = membershipID;
 		this.type = type;
 		this.dateOfPayment = dateOfPayment;
 		this.periodOfValidity = periodOfValidity;
 		this.price = price;
-		this.customer = customer;
 		this.status = status;
 		this.numberOfAppointments = numberOfAppointments;
 	}
@@ -66,14 +64,6 @@ public class Membership {
 
 	public void setPrice(double price) {
 		this.price = price;
-	}
-
-	public Customer getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
 	}
 
 	public boolean isStatus() {

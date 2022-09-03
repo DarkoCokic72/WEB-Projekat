@@ -378,6 +378,20 @@ public class MainApp {
 			return gson.toJson(scheduledWorkoutService.cancelWorkout(id));
 		});
 		
+		get("/manager/getSportFacility", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(managerRepository.getSportFacilityByUsername(getUsername(req.headers("Authorization"))));
+		});
+		
+		get("/manager/getCoaches", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(workoutService.getCoachesBySportFacilityName(managerRepository.getSportFacilityByUsername(getUsername(req.headers("Authorization")))));
+		});
+		
+		get("/manager/getCustomers", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(workoutHistoryService.getCustomersBySportFacilityName(managerRepository.getSportFacilityByUsername(getUsername(req.headers("Authorization")))));
+		});
 	}
 
 }

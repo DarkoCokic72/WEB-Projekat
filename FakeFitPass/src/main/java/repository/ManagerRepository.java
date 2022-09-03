@@ -53,4 +53,13 @@ public class ManagerRepository extends Repository<Manager, String> {
 		Manager manager = getOne(username);
 		return manager.getSportFacility().getContent();
 	}
+	
+	public String getSportFacilityByUsername(String username) {
+		for(Manager manager: getAll()) {
+			if(manager.getUsername().equals(username)) {
+				return manager.getSportFacility().getName();
+			}
+		}
+		return null;
+	}
 }
