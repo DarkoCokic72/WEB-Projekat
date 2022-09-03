@@ -1,16 +1,25 @@
 package service;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import beans.Customer;
 import beans.TypeOfWorkout;
 import beans.Workout;
 import beans.WorkoutHistory;
+import dto.ScheduledAndWorkoutHistoryWorkoutsDTO;
+import dto.ScheduledWorkoutDTO;
 import repository.CoachRepository;
 import repository.CustomerRepository;
+import repository.ScheduledWorkoutRepository;
 import repository.SportFacilityRepository;
 import repository.WorkoutHistoryRepository;
 
@@ -20,6 +29,7 @@ public class WorkoutHistoryService {
 	private CoachRepository coachRepository = new CoachRepository();
 	private CustomerRepository customerRepository = new CustomerRepository();
 	private SportFacilityRepository sportFacilityRepository = new SportFacilityRepository();
+	private ScheduledWorkoutRepository scheduledWorkoutRepository = new ScheduledWorkoutRepository();
 	
 	
 	public boolean add() {
@@ -58,5 +68,38 @@ public class WorkoutHistoryService {
 			}
 		}
 		return true;
+	}
+	
+	public List<ScheduledAndWorkoutHistoryWorkoutsDTO> getAllScheduledAndWorkoutHistoryWorkouts(){
+		List<ScheduledAndWorkoutHistoryWorkoutsDTO> sh = new ArrayList<ScheduledAndWorkoutHistoryWorkoutsDTO>();
+		for(WorkoutHistory wh: workoutHistoryRepository.getAll()) {
+			sh.add(new ScheduledAndWorkoutHistoryWorkoutsDTO(wh.getTimeOfCheckIn(), wh.getWorkout()));
+		}
+		for(ScheduledWorkoutDTO sw: scheduledWorkoutRepository.getAll()) {
+			sh.add(new ScheduledAndWorkoutHistoryWorkoutsDTO(sw.getDateTimeOfWorkout(), sw.getWorkout()));
+		}
+		return sh;
+	}
+	
+	public List<ScheduledAndWorkoutHistoryWorkoutsDTO> searchWorkouts(List<ScheduledAndWorkoutHistoryWorkoutsDTO> scheduledAndWorkoutHistoryWorkouts, String sportFacilityNameSearch, String dateFromStr, String dateToStr) throws ParseException {
+		Date dateFrom;
+		Date dateTo;
+		try {
+			dateFrom = new SimpleDateFormat("yyyy-MM-dd").parse(dateFromStr);
+			dateTo = new SimpleDateFormat("yyyy-MM-dd").parse(dateToStr);
+			
+		} catch (ParseException e) {
+		
+			dateFrom = new SimpleDateFormat("yyyy-MM-dd").parse("1980-01-01");
+			dateTo = new SimpleDateFormat("yyyy-MM-dd").parse("2100-01-01");
+		}
+		List<ScheduledAndWorkoutHistoryWorkoutsDTO> searchedWorkouts = new ArrayList<ScheduledAndWorkoutHistoryWorkoutsDTO>();
+		for(ScheduledAndWorkoutHistoryWorkoutsDTO sw: scheduledAndWorkoutHistoryWorkouts) {
+			Date date = Date.from(sw.getDateTimeOfWorkout().atZone(ZoneId.systemDefault()).toInstant());
+			if(sw.getWorkout().getSportFacility().getName().toLowerCase().startsWith(sportFacilityNameSearch.toLowerCase()) && (date.getTime() >= dateFrom.getTime() && date.getTime() <= dateTo.getTime())) {
+				searchedWorkouts.add(sw);
+			}
+		}
+		return searchedWorkouts;
 	}
 }

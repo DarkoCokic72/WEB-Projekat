@@ -19,8 +19,9 @@ Vue.component('coach', {
 		<h1>Dobro došli treneru!</h1>                      
 		<a href="/#/" v-on:click="logout()">Odjava</a><br/>
 		<a href="/#/editUser">Pregled i izmena ličnih podataka</a><br/>
-		<a href="/#/coachTrainingsView">Pregled svih treninga</a><br/>
+		<a href="/#/coachTrainingsView">Pregled svih sopstvenih treninga</a><br/>
 		<a href="/#/scheduledTrainingsViewAndDelete">Pregled i otkazivanje personalnih treninga</a><br/>
+		<a href="/#/allWorkouts">Pregled svih treninga</a><br/>
 	</div>
 `
 })

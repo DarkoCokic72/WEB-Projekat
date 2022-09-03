@@ -10,6 +10,7 @@ import static spark.Spark.staticFiles;
 
 import java.io.File;
 import java.security.Key;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -391,6 +392,23 @@ public class MainApp {
 		get("/manager/getCustomers", (req, res) -> {
 			res.type("application/json");
 			return gson.toJson(workoutHistoryService.getCustomersBySportFacilityName(managerRepository.getSportFacilityByUsername(getUsername(req.headers("Authorization")))));
+		});
+		
+		get("/allWorkouts", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(workoutHistoryService.getAllScheduledAndWorkoutHistoryWorkouts());
+		});
+		
+		get("/searchWorkouts", (req, res) -> {
+			res.type("application/json");
+			String sportFacilityNameSearch = req.queryParams("sportFacilityNameSearch");
+			String dateFrom = req.queryParams("dateFrom");
+			String dateTo = req.queryParams("dateTo");
+
+			if (sportFacilityNameSearch == null && dateFrom == null && dateTo == null) {
+				return gson.toJson(workoutHistoryService.getAllScheduledAndWorkoutHistoryWorkouts());
+			}
+			return gson.toJson(workoutHistoryService.searchWorkouts(workoutHistoryService.getAllScheduledAndWorkoutHistoryWorkouts(), sportFacilityNameSearch, dateFrom, dateTo));
 		});
 	}
 

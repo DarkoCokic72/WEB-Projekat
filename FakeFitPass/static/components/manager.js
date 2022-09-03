@@ -24,6 +24,7 @@ Vue.component('manager', {
 		<a href="/#/displayContentForEdit">Prikaz sadržaja za izmenu</a><br/>
 		<a href="/#/managerTrainingsView">Pregled svih treninga</a><br/>
 		<a href="/#/managerSportFacilityView">Pregled sportskog objekta</a><br/>
+		<a href="/#/allWorkouts">Pregled svih treninga</a><br/>
 	</div>                   
 `
 })

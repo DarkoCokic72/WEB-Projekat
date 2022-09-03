@@ -20,7 +20,7 @@ Vue.component('coachTrainingsView', {
 	template: 
     `
         <div>
-            <h1>Pregled svih treninga</h1>
+            <h1>Pregled svih sopstvenih treninga</h1>
             <table id="table" border="1">
                 <thead>
                     <tr>
