@@ -5,7 +5,11 @@ Vue.component('allWorkouts', {
             sportFacilityNameSearch: '',
             dateFrom: '',
             dateTo: '',
-            role: localStorage.getItem('role')
+            role: localStorage.getItem('role'),
+            sortColumn: '',
+            typeFacilityFilter: '',
+            typeWorkoutFilter: '',
+            name: ''
 		}
 	},
 	methods: {
@@ -19,6 +23,70 @@ Vue.component('allWorkouts', {
                         dateFrom: this.dateFrom,
                         dateTo: this.dateTo
 					}
+				})
+				.then(response => {
+					if (response.data) {
+						this.workouts = response.data;
+					}
+				})
+		},
+
+        "sortTable": function sortTable(col) {
+			if (this.sortColumn === col) {
+				this.ascending = !this.ascending;
+			} else {
+				this.ascending = true;
+				this.sortColumn = col;
+			}
+			startval = col.slice()
+			var ascending = this.ascending;
+			this.workouts.sort(function(a, b) {
+				if (startval === 'workout.sportFacility.name')
+				{
+					col = 'name'
+					a = a['workout']
+					b = b['workout']
+                    a = a['sportFacility']
+                    b = b['sportFacility']
+				}
+                if (startval === 'dateTimeOfWorkout.date')
+				{
+
+					col = 'date'
+					a = a['dateTimeOfWorkout']
+					b = b['dateTimeOfWorkout']
+				}
+				if (a[col] > b[col]) {
+					return ascending ? 1 : -1
+				} else if (a[col] < b[col]) {
+					return ascending ? -1 : 1
+				}
+				return 0;
+			})
+		},
+
+        "filter": function(e) {
+			axios.get("/filterWorkouts",
+				{
+					contentType: "application/json",
+					dataType: "json",
+					params: {
+						typeFacilityFilter: this.typeFacilityFilter,
+                        typeWorkoutFilter: this.typeWorkoutFilter
+					}
+				})
+				.then(response => {
+					if (response.data) {
+						this.workouts = response.data;
+					}
+				})
+		},
+
+        "sortDates": function() {
+			axios.get("/sortDates",
+				{
+					contentType: "application/json",
+					dataType: "json"
 				})
 				.then(response => {
 					if (response.data) {
@@ -47,14 +115,32 @@ Vue.component('allWorkouts', {
                 <input v-model="dateFrom" type="date">
                 Krajnji datum:
                 <input v-model="dateTo" type="date">
-                <button v-on:click="search">Pretraga</button>
+                <button v-on:click="search">Pretraži</button>
             </div>
+            <div>
+                <label v-if="role === 'Customer' || role === 'Coach'">Tip sportskog objekta:</label>
+                <select name="type" v-model="typeFacilityFilter" v-if="role === 'Customer' || role === 'Coach'">
+                    <option></option>
+                    <option value="Gym">Teretana</option>
+                    <option value="Pool">Bazen</option>
+                    <option value="SportCentre">Sportski centar</option>
+                    <option value="DanceStudio">Plesni studio</option>
+                </select>
+                <label>Tip treninga:</label>
+                <select name="typeWorkout" v-model="typeWorkoutFilter">
+                    <option></option>
+                    <option value="Group">Grupni</option>
+                    <option value="Personal">Personalni</option>
+                    <option value="Gym">Teretana</option>
+                </select>
+                <button v-on:click="filter">Filtriraj</button>
+		    </div>
             <table id="table" border="1">
                 <thead>
                     <tr>
-                        <th>Naziv sportskog objekta</th>
+                        <th @click="sortTable('workout.sportFacility.name')">Naziv sportskog objekta</th>
                         <th>Tip sportskog objekta</th>
-                        <th>Datum prijave treninga</th>
+                        <th @click="sortDates()">Datum prijave treninga</th>
                         <th>Naziv treninga</th>
                         <th>Tip treninga</th>
                     </tr>

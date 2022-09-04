@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import beans.Workout;
 
-public class ScheduledAndWorkoutHistoryWorkoutsDTO {
+public class ScheduledAndWorkoutHistoryWorkoutsDTO implements Comparable<ScheduledAndWorkoutHistoryWorkoutsDTO>{
 
 	private LocalDateTime dateTimeOfWorkout;
 	private Workout workout;
@@ -31,5 +31,9 @@ public class ScheduledAndWorkoutHistoryWorkoutsDTO {
 		this.workout = workout;
 	}
 	
+	@Override
+	public int compareTo(ScheduledAndWorkoutHistoryWorkoutsDTO e) {
+		return this.getDateTimeOfWorkout().compareTo(e.getDateTimeOfWorkout());
+	}
 	
 }

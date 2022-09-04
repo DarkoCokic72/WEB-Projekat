@@ -8,10 +8,12 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import beans.Customer;
+import beans.TypeOfFacility;
 import beans.TypeOfWorkout;
 import beans.Workout;
 import beans.WorkoutHistory;
@@ -30,6 +32,7 @@ public class WorkoutHistoryService {
 	private CustomerRepository customerRepository = new CustomerRepository();
 	private SportFacilityRepository sportFacilityRepository = new SportFacilityRepository();
 	private ScheduledWorkoutRepository scheduledWorkoutRepository = new ScheduledWorkoutRepository();
+	private int counter = 0;
 	
 	
 	public boolean add() {
@@ -101,5 +104,31 @@ public class WorkoutHistoryService {
 			}
 		}
 		return searchedWorkouts;
+	}
+	
+	public List<ScheduledAndWorkoutHistoryWorkoutsDTO> filterWorkouts(List<ScheduledAndWorkoutHistoryWorkoutsDTO> scheduledAndWorkoutHistoryWorkouts, String typeFacilityFilter, String typeWorkoutFilter){
+		List<ScheduledAndWorkoutHistoryWorkoutsDTO> filteredWorkouts = new ArrayList<ScheduledAndWorkoutHistoryWorkoutsDTO>();
+		for(ScheduledAndWorkoutHistoryWorkoutsDTO sw: scheduledAndWorkoutHistoryWorkouts) {
+			if(sw.getWorkout().getSportFacility().getType().equals(TypeOfFacility.fromString(typeFacilityFilter)) && typeWorkoutFilter == "") {
+				filteredWorkouts.add(sw);
+			}else if(sw.getWorkout().getType().equals(TypeOfWorkout.fromString(typeWorkoutFilter)) && typeFacilityFilter == "") {
+				filteredWorkouts.add(sw);
+			}else if(sw.getWorkout().getSportFacility().getType().equals(TypeOfFacility.fromString(typeFacilityFilter)) && sw.getWorkout().getType().equals(TypeOfWorkout.fromString(typeWorkoutFilter))) {
+				filteredWorkouts.add(sw);
+			}
+		}
+		return filteredWorkouts;
+	}
+	
+	public List<ScheduledAndWorkoutHistoryWorkoutsDTO> sortWorkoutsByDateTime(){
+		List<ScheduledAndWorkoutHistoryWorkoutsDTO> scheduledAndWorkoutHistoryWorkouts = getAllScheduledAndWorkoutHistoryWorkouts();
+		++counter;
+		if(counter == 1) {
+			Collections.sort(scheduledAndWorkoutHistoryWorkouts);
+		}else if(counter == 2) {
+			Collections.sort(scheduledAndWorkoutHistoryWorkouts, Collections.reverseOrder());
+			counter = 0;
+		}
+		return scheduledAndWorkoutHistoryWorkouts;
 	}
 }

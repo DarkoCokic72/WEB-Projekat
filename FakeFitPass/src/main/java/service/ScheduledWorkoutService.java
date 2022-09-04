@@ -2,10 +2,12 @@ package service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import beans.IdGenerator;
 import beans.WorkoutHistory;
+import dto.ScheduledAndWorkoutHistoryWorkoutsDTO;
 import dto.ScheduledWorkoutDTO;
 import repository.CustomerRepository;
 import repository.ScheduledWorkoutRepository;

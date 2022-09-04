@@ -132,8 +132,6 @@ public class MainApp {
             String jws = null;
             LoggedInUserDTO dto = new LoggedInUserDTO();
             
-            workoutService.add();
-            
 
             User user = userService.findByID(username);
             if (user == null || !user.getPassword().equals(password)) {
@@ -409,6 +407,22 @@ public class MainApp {
 				return gson.toJson(workoutHistoryService.getAllScheduledAndWorkoutHistoryWorkouts());
 			}
 			return gson.toJson(workoutHistoryService.searchWorkouts(workoutHistoryService.getAllScheduledAndWorkoutHistoryWorkouts(), sportFacilityNameSearch, dateFrom, dateTo));
+		});
+		
+		get("/filterWorkouts", (req, res) -> {
+			res.type("application/json");
+			String typeFacilityFilter = req.queryParams("typeFacilityFilter");
+			String typeWorkoutFilter = req.queryParams("typeWorkoutFilter");
+
+			if (typeFacilityFilter == "" && typeWorkoutFilter == "") {
+				return gson.toJson(workoutHistoryService.getAllScheduledAndWorkoutHistoryWorkouts());
+			}
+			return gson.toJson(workoutHistoryService.filterWorkouts(workoutHistoryService.getAllScheduledAndWorkoutHistoryWorkouts(), typeFacilityFilter, typeWorkoutFilter));
+		});
+		
+		get("/sortDates", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(workoutHistoryService.sortWorkoutsByDateTime());
 		});
 	}
 

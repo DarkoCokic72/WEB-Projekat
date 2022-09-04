@@ -9,7 +9,7 @@ Vue.component('login', {
 
 	methods: {
 		checkResponse: function(response, event) {
-			if (JSON.parse(JSON.stringify(response.data))[0] === "-1") {
+			if (response.data.jwt === "-1") {
 				alert("Pogrešni kredencijali.")
 			}
 			else {
