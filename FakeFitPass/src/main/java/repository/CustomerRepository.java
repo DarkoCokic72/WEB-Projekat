@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import com.google.gson.reflect.TypeToken;
 
 import beans.*;
-import repository.LogicalEntity;
-import repository.Repository;
 
 public class CustomerRepository extends Repository<Customer, String>{
 	@Override
@@ -17,5 +15,16 @@ public class CustomerRepository extends Repository<Customer, String>{
 	@Override
 	protected Type getTokenType() {
 		return new TypeToken<ArrayList<LogicalEntity<Customer>>>() {}.getType();
+	}
+	
+	public boolean addMembershipId(String username, String membershipId) {
+		for(Customer customer: getAll()) {
+			if(customer.getUsername().equals(username)) {
+				customer.setMembership(membershipId);
+				update(username, customer);
+				return true;
+			}
+		}
+		return false;
 	}
 }

@@ -36,9 +36,13 @@ Vue.component('registration', {
 			if (!this.username || !this.password || !this.name || !this.surname ||
 				!this.gender || !this.dateOfBirth || !this.role) {
 				alert("Morate popuniti sva polja!")
-			}
-			else if (localStorage.getItem('registracijaNovog') === "true"){
-				if(localStorage.getItem("currentFacility") !== "null"){
+			}else if(this.password.length < 8){
+				alert("Password mora sadržati najmanje 8 karaktera!");
+			}else if(localStorage.getItem('registracijaNovog') === "true"){
+				if(this.role === "Customer"){
+					this.role = "Customer";
+				}
+				else if(localStorage.getItem("currentFacility") !== "null"){
 					this.role = "Manager";
 				}
 				if(this.gender === "Muski"){

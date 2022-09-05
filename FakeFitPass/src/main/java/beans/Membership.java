@@ -10,7 +10,7 @@ public class Membership {
 	private LocalDateTime periodOfValidity;
 	private double price;
 	private boolean status;
-	private int numberOfAppointments; //broj termina
+	private int numberOfAppointments;
 	
 	public Membership() {}
 	
@@ -81,7 +81,6 @@ public class Membership {
 	public void setNumberOfAppointments(int numberOfAppointments) {
 		this.numberOfAppointments = numberOfAppointments;
 	}
-	
 	
 	
 }

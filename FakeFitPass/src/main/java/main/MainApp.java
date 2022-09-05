@@ -47,6 +47,8 @@ import repository.SportFacilityRepository;
 import repository.WorkoutHistoryRepository;
 import repository.WorkoutRepository;
 import service.ManagerService;
+import service.MembershipDTOService;
+import service.MembershipService;
 import service.ScheduledWorkoutService;
 import service.SportFacilityService;
 import service.UserService;
@@ -68,6 +70,8 @@ public class MainApp {
 	private static WorkoutRepository workoutRepository = new WorkoutRepository();
 	private static WorkoutService workoutService = new WorkoutService();
 	private static ScheduledWorkoutService scheduledWorkoutService = new ScheduledWorkoutService();
+	private static MembershipDTOService membershipDTOService = new MembershipDTOService();
+	private static MembershipService membershipService = new MembershipService();
 	private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 	private static IdGenerator idGenerator = new IdGenerator();
 
@@ -423,6 +427,21 @@ public class MainApp {
 		get("/sortDates", (req, res) -> {
 			res.type("application/json");
 			return gson.toJson(workoutHistoryService.sortWorkoutsByDateTime());
+		});
+		
+		get("/customer/allMemberships", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(membershipDTOService.getAll());
+		});
+		
+		get("/customer/displayMembership", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(membershipDTOService.findMembershipById(req.queryParams("membershipId")));
+		});
+		
+		post("/customer/buyMembership", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(customerRepository.addMembershipId(getUsername(req.headers("Authorization")), membershipService.addMembership(getUsername(req.headers("Authorization")), membershipDTOService.findMembershipById(req.queryParams("membershipId")))));
 		});
 	}
 

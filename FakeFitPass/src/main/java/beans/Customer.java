@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Customer extends User{
-	private Membership membership;
+	private String membershipId;
 	private List<SportFacility> visitedFacilities;
 	private double collectedPoints;
 	private TypeOfCustomer type;
@@ -13,10 +13,10 @@ public class Customer extends User{
 	public Customer() {}
 	
 	public Customer(String username, String password, String name, String surname, Gender gender, Date dateOfBirth,
-			Membership membership,
+			String membershipId,
 			TypeOfCustomer type) {
 		super(username, password, name, surname, gender, dateOfBirth, Role.Customer);
-		this.membership = membership;
+		this.membershipId = membershipId;
 		this.visitedFacilities = new ArrayList<SportFacility>();
 		this.collectedPoints = 0;
 		this.type = new TypeOfCustomer(type.getTypeName());
@@ -24,14 +24,18 @@ public class Customer extends User{
 	
 	public Customer(User user) {
 		super(user);
+		this.membershipId = "";
+		this.visitedFacilities = new ArrayList<SportFacility>();
+		this.collectedPoints = 0;
+		this.type = new TypeOfCustomer();
 	}
 
-	public Membership getMembership() {
-		return membership;
+	public String getMembershipId() {
+		return membershipId;
 	}
 
-	public void setMembership(Membership membership) {
-		this.membership = membership;
+	public void setMembership(String membershipId) {
+		this.membershipId = membershipId;
 	}
 
 	public List<SportFacility> getVisitedFacilities() {
