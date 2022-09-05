@@ -29,6 +29,7 @@ import beans.SportFacility;
 import beans.User;
 import beans.Workout;
 import beans.WorkoutHistory;
+import dto.CustomerAndWorkoutDTO;
 import dto.LoggedInUserDTO;
 import dto.ScheduledWorkoutDTO;
 import dto.SchedulingWorkoutDTO;
@@ -442,6 +443,32 @@ public class MainApp {
 		post("/customer/buyMembership", (req, res) -> {
 			res.type("application/json");
 			return gson.toJson(customerRepository.addMembershipId(getUsername(req.headers("Authorization")), membershipService.addMembership(getUsername(req.headers("Authorization")), membershipDTOService.findMembershipById(req.queryParams("membershipId")))));
+		});
+		
+		get("/manager/allWorkouts", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(workoutService.getWorkoutsBySportFacilityName(managerRepository.getSportFacilityByUsername(getUsername(req.headers("Authorization")))));
+		});
+		
+		get("/manager/allCustomers", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(customerRepository.getAll());
+		});
+		
+		put("/manager/changeStatus", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(membershipService.changeStatus());
+		});
+		
+		post("/manager/defineTerm", (req, res) -> {
+			res.type("application/json");
+			Gson gson = new GsonBuilder().create();
+			CustomerAndWorkoutDTO customerAndWorkoutDTO = gson.fromJson(req.body(), CustomerAndWorkoutDTO.class);
+			if(membershipService.findMembershipById(customerAndWorkoutDTO.getCustomerId()).getStatus() == false || membershipService.findMembershipById(customerAndWorkoutDTO.getCustomerId()).getNumberOfAppointments() <= 0) {
+				return false;
+			}
+			membershipService.decreaseNumberOfAppointments(membershipService.findMembershipById(customerAndWorkoutDTO.getCustomerId()));
+			return gson.toJson(workoutHistoryService.defineTerm(customerRepository.getOne(customerAndWorkoutDTO.getCustomerId()), workoutService.findWorkoutById(customerAndWorkoutDTO.getWorkoutId())));
 		});
 	}
 

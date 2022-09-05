@@ -81,4 +81,14 @@ public class WorkoutService {
 		}
 		return coaches;
 	}
+	
+	public List<Workout> getWorkoutsBySportFacilityName(String sportFacilityName){
+		List<Workout> workouts = new ArrayList<Workout>();
+		for(Workout workout: workoutRepository.getAll()) {
+			if(workout.getSportFacility().getName().equals(sportFacilityName)) {
+				workouts.add(workout);
+			}
+		}
+		return null;
+	}
 }

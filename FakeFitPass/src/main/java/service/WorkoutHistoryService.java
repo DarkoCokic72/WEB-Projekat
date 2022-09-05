@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 import beans.Customer;
+import beans.IdGenerator;
 import beans.TypeOfFacility;
 import beans.TypeOfWorkout;
 import beans.Workout;
@@ -32,6 +33,7 @@ public class WorkoutHistoryService {
 	private CustomerRepository customerRepository = new CustomerRepository();
 	private SportFacilityRepository sportFacilityRepository = new SportFacilityRepository();
 	private ScheduledWorkoutRepository scheduledWorkoutRepository = new ScheduledWorkoutRepository();
+	private IdGenerator idGenerator = new IdGenerator();
 	private int counter = 0;
 	
 	
@@ -130,5 +132,9 @@ public class WorkoutHistoryService {
 			counter = 0;
 		}
 		return scheduledAndWorkoutHistoryWorkouts;
+	}
+	
+	public boolean defineTerm(Customer customer, Workout workout) {
+		return workoutHistoryRepository.addOne(new WorkoutHistory(idGenerator.generateRandomKey(4), LocalDateTime.now(), workout, customer, workout.getCoach()));
 	}
 }

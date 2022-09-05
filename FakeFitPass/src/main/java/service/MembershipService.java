@@ -38,7 +38,7 @@ public class MembershipService {
 		return id;
 	}
 	
-	private Membership findMembershipById(String username) {
+	public Membership findMembershipById(String username) {
 		String membershipId = null;
 		for(Customer customer: customerRepository.getAll()) {
 			if(customer.getUsername().equals(username)) {
@@ -51,5 +51,21 @@ public class MembershipService {
 			}
 		}
 		return null;
+	}
+	
+	public boolean changeStatus() {
+		for(Membership membership: membershipRepository.getAll()) {
+			if(membership.getNumberOfAppointments() == 0 || membership.getPeriodOfValidity().compareTo(LocalDateTime.now()) <= 0) {
+				membership.setStatus(false);
+				membershipRepository.update(membership.getMembershipID(), membership);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void decreaseNumberOfAppointments(Membership membership) {
+		membership.setNumberOfAppointments(membership.getNumberOfAppointments() - 1);
+		membershipRepository.update(membership.getMembershipID(), membership);
 	}
 }

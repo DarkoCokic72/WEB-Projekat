@@ -66,7 +66,7 @@ public class Membership {
 		this.price = price;
 	}
 
-	public boolean isStatus() {
+	public boolean getStatus() {
 		return status;
 	}
 
