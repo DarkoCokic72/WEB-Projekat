@@ -27,6 +27,7 @@ const AdministratorCommentsView = {template: '<administratorCommentsView/>'}
 const CustomerCommentsView = {template: '<customerCommentsView/>'}
 const ManagerCommentsView = {template: '<managerCommentsView/>'}
 const AdministratorAprovedAndDeniedCommentsView = {template: '<administratorAprovedAndDeniedCommentsView/>'}
+const AdministratorLogicalDeletion = {template: '<administratorLogicalDeletion/>'}
 
 
 const router = new VueRouter({
@@ -60,12 +61,13 @@ const router = new VueRouter({
     {path: '/administratorCommentsView',name: 'AdministratorCommentsView', component: AdministratorCommentsView},
     {path: '/customerCommentsView',name: 'CustomerCommentsView', component: CustomerCommentsView},
     {path: '/managerCommentsView',name: 'ManagerCommentsView', component: ManagerCommentsView},
-    {path: '/administratorAprovedAndDeniedCommentsView',name: 'AdministratorAprovedAndDeniedCommentsView', component: AdministratorAprovedAndDeniedCommentsView}
+    {path: '/administratorAprovedAndDeniedCommentsView',name: 'AdministratorAprovedAndDeniedCommentsView', component: AdministratorAprovedAndDeniedCommentsView},
+    {path: '/administratorLogicalDeletion',name: 'AdministratorLogicalDeletion', component: AdministratorLogicalDeletion}
 	  ]
 });
 
 const protectedRoutes = ['EditUser', 'AllWorkouts']
-const adminRoutes = ['Admin', 'EditUser', 'AllUsers', 'NewFacility', 'AdministratorCommentsView', 'AdministratorAprovedAndDeniedCommentsView']
+const adminRoutes = ['Admin', 'EditUser', 'AllUsers', 'NewFacility', 'AdministratorCommentsView', 'AdministratorAprovedAndDeniedCommentsView', 'AdministratorLogicalDeletion']
 const managerRoutes = ['Manager', 'NewContent', 'EditContent', 'DisplayContentsForEdit', 'ManagerTrainingsView', 'ManagerSportFacilityView', 'DefineTerm', 'ManagerCommentsView']
 const customerRoutes = ['Customer', 'CustomerTrainingsView', 'SchedulingTraining', 'CreateMembership', 'CustomerCreateComment', 'CustomerCommentsView']
 const coachRoutes = ['Coach', 'CoachTrainingsView', 'ScheduledTrainingsViewAndDelete']

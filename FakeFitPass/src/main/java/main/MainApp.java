@@ -536,6 +536,31 @@ public class MainApp {
 			res.type("application/json");
 			return gson.toJson(commentService.getAprovedAndDeniedComments());
 		});
+		
+		delete("/admin/deleteUser", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(userService.deleteUser(req.queryParams("username")));
+		});
+		
+		delete("/admin/deleteWorkout", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(workoutService.deleteWorkout(req.queryParams("id")));
+		});
+		
+		get("/admin/allWorkouts", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(workoutRepository.getAll());
+		});
+		
+		get("/admin/allSportFacilities", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(sportFacilityRepository.getAll());
+		});
+		
+		delete("/admin/deleteFacility", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(sportFacilityService.deleteFacility(req.queryParams("name")));
+		});
 	}
 
 }

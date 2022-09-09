@@ -58,7 +58,19 @@ Vue.component('allUsers', {
 				}
 				return 0;
 			})
-		}
+		},
+
+        "logicalDeletion": function(username){
+            axios.delete("/admin/deleteUser?username=" + username,
+				    )
+					.then(response => {
+						if(response.data)
+						{ 
+                            alert("Uspešno obrisan korisnik.");
+							window.location.reload();
+						}
+					})
+        }
     },
     mounted(){
         axios.get("/admin/allUsers", {
@@ -122,6 +134,9 @@ Vue.component('allUsers', {
                         <th v-on:click="sortTable('collectedPoints')">
                             Sakupljeni bodovi
                         </th>
+                        <th>
+                            Opcije
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -148,6 +163,7 @@ Vue.component('allUsers', {
                             Kupac
                         </td>
                         <td>{{user.collectedPoints}}</td>
+                        <td><button @click="logicalDeletion(user.username)">Obriši</button></td>
                     </tr>
                 </tbody>
             </table>

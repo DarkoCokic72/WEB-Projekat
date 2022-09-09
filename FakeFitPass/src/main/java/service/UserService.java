@@ -107,4 +107,26 @@ public class UserService {
 		}
 		return filtered;
 	}
+	
+	public boolean deleteUser(String username) {
+		for(Customer customer: customerRepository.getAll()) {
+			if(customer.getUsername().equals(username)) {
+				customerRepository.delete(username);
+				return true;
+			}
+		}
+		for(Manager manager: managerRepository.getAll()) {
+			if(manager.getUsername().equals(username)) {
+				managerRepository.delete(username);
+				return true;
+			}
+		}
+		for(Coach coach: coachRepository.getAll()) {
+			if(coach.getUsername().equals(username)) {
+				coachRepository.delete(username);
+				return true;
+			}
+		}
+		return false;
+	}
 }

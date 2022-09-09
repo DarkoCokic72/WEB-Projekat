@@ -143,7 +143,7 @@ Vue.component('facilitiesView', {
                             <img :src="facility.image"/>
                         </td>
                         <td>{{facility.startTime.time.hour}} - {{facility.endTime.time.hour}}</td>
-                        <td class = "open">Otvoren</td>
+                        <td class="open">Otvoren</td>
                         <td>{{facility.averageScore}}/5</td>
                     </tr>
                 </tbody>

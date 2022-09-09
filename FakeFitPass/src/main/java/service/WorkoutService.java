@@ -91,4 +91,14 @@ public class WorkoutService {
 		}
 		return null;
 	}
+	
+	public boolean deleteWorkout(String id) {
+		for(Workout workout: workoutRepository.getAll()) {
+			if(workout.getId().equals(id)) {
+				workoutRepository.delete(id);
+				return true;
+			}
+		}
+		return false;
+	}
 }
