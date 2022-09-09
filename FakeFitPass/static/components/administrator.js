@@ -23,6 +23,7 @@ Vue.component('administrator', {
 		<a href="/#/editUser">Pregled i izmena ličnih podataka</a><br/>
 		<a href="/#/newFacility">Novi sportski objekat</a><br/>
 		<a href="/#/allWorkouts">Pregled svih treninga</a><br/>
+		<a href="/#/administratorCommentsView">Prihvatanje i odbijanje komentara</a><br/>
 	</div>                   
 `
 })

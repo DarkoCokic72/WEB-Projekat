@@ -501,6 +501,26 @@ public class MainApp {
 			Gson gson = new GsonBuilder().create();
 			return gson.toJson(commentService.addNewComment(new Comment(idGenerator.generateRandomKey(4), gson.fromJson(req.body(), CommentDTO.class))));
 		});
+		
+		get("/admin/allComments", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(commentService.getAllComments());
+		});
+		
+		put("/admin/denieComment", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(commentService.denieComment(req.queryParams("id")));
+		});
+		
+		put("/admin/aproveComment", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(commentService.aproveComment(req.queryParams("id")));
+		});
+		
+		get("/getAprovedComments", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(commentService.getAprovedComments(req.queryParams("sportFacilityName")));
+		});
 	}
 
 }

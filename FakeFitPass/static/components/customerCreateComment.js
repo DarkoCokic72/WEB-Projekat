@@ -6,7 +6,7 @@ Vue.component("customerCreateComment", {
 		      isSelected: false,
 		      text: '',
 		      grade: '',
-		      selectedSportFacility: null
+		      selectedSportFacility: ''
 		    }
 	},
     methods : {
@@ -20,7 +20,7 @@ Vue.component("customerCreateComment", {
 				axios
 					.post('/customer/createComment', {
 						customer: this.customer,
-                        selectedSportFacility: this.selectedSportFacility,
+                        sportFacility: this.selectedSportFacility,
                         text: this.text,
                         score: this.grade,
                         isAproved: false,

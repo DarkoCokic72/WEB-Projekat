@@ -67,19 +67,19 @@ public class Comment {
 		this.score = score;
 	}
 
-	public boolean isAproved() {
+	public boolean getIsAproved() {
 		return isAproved;
 	}
 
-	public void setAproved(boolean isAproved) {
+	public void setIsAproved(boolean isAproved) {
 		this.isAproved = isAproved;
 	}
 
-	public boolean isDenied() {
+	public boolean getIsDenied() {
 		return isDenied;
 	}
 
-	public void setDenied(boolean isDenied) {
+	public void setIsDenied(boolean isDenied) {
 		this.isDenied = isDenied;
 	}
 

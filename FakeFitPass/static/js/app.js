@@ -23,6 +23,7 @@ const AllWorkouts = {template: '<allWorkouts/>'}
 const CreateMembership = {template: '<createMembership/>'}
 const DefineTerm = {template: '<defineTerm/>'}
 const CustomerCreateComment = {template: '<customerCreateComment/>'}
+const AdministratorCommentsView = {template: '<administratorCommentsView/>'}
 
 
 const router = new VueRouter({
@@ -52,15 +53,17 @@ const router = new VueRouter({
     {path: '/allWorkouts',name: 'AllWorkouts', component: AllWorkouts},
     {path: '/createMembership',name: 'CreateMembership', component: CreateMembership},
     {path: '/defineTerm',name: 'DefineTerm', component: DefineTerm},
-    {path: '/customerCreateComment',name: 'CustomerCreateComment', component: CustomerCreateComment}
+    {path: '/customerCreateComment',name: 'CustomerCreateComment', component: CustomerCreateComment},
+    {path: '/administratorCommentsView',name: 'AdministratorCommentsView', component: AdministratorCommentsView}
 	  ]
 });
 
 const protectedRoutes = ['EditUser', 'AllWorkouts']
-const adminRoutes = ['Admin', 'EditUser', 'AllUsers', 'NewFacility']
+const adminRoutes = ['Admin', 'EditUser', 'AllUsers', 'NewFacility', 'AdministratorCommentsView']
 const managerRoutes = ['Manager', 'NewContent', 'EditContent', 'DisplayContentsForEdit', 'ManagerTrainingsView', 'ManagerSportFacilityView', 'DefineTerm']
 const customerRoutes = ['Customer', 'CustomerTrainingsView', 'SchedulingTraining', 'CreateMembership', 'CustomerCreateComment']
 const coachRoutes = ['Coach', 'CoachTrainingsView', 'ScheduledTrainingsViewAndDelete']
+
 router.beforeEach((to,from,next) => {
   if(protectedRoutes.includes(to.name)){
     if(window.localStorage.getItem("jwt")!==''){
