@@ -521,6 +521,11 @@ public class MainApp {
 			res.type("application/json");
 			return gson.toJson(commentService.getAprovedComments(req.queryParams("sportFacilityName")));
 		});
+		
+		get("/customer/getAprovedComments", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(commentService.getAprovedComments());
+		});
 	}
 
 }

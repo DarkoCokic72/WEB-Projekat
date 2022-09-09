@@ -23,7 +23,8 @@ Vue.component('customer', {
 		<a href="/#/schedulingTraining">Zakazivanje personalnih treninga</a><br/>
 		<a href="/#/allWorkouts">Pregled svih treninga</a><br/>
 		<a href="/#/createMembership">Kreiranje članarina</a><br/>
-		<a href="/#/customerCreateComment">Ostavljanje komentara</a><br/>    	
+		<a href="/#/customerCreateComment">Ostavljanje komentara</a><br/>
+		<a href="/#/customerCommentsView">Pregled odobrenih komentara</a><br/>    	
 	 </div>      
 		      
 `

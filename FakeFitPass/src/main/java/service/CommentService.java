@@ -49,4 +49,14 @@ public class CommentService {
 		}
 		return comments;
 	}
+	
+	public List<Comment> getAprovedComments(){
+		List<Comment> comments = new ArrayList<Comment>();
+		for(Comment comment: commentRepository.getAll()) {
+			if(comment.getIsAproved() == true) {
+				comments.add(comment);
+			}
+		}
+		return comments;
+	}
 }
