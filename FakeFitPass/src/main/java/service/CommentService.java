@@ -59,4 +59,14 @@ public class CommentService {
 		}
 		return comments;
 	}
+	
+	public List<Comment> getAprovedAndDeniedComments(){
+		List<Comment> comments = new ArrayList<Comment>();
+		for(Comment comment: commentRepository.getAll()) {
+			if(comment.getIsAproved() == true || comment.getIsDenied() == true) {
+				comments.add(comment);
+			}
+		}
+		return comments;
+	}
 }

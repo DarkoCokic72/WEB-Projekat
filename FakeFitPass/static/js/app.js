@@ -25,6 +25,8 @@ const DefineTerm = {template: '<defineTerm/>'}
 const CustomerCreateComment = {template: '<customerCreateComment/>'}
 const AdministratorCommentsView = {template: '<administratorCommentsView/>'}
 const CustomerCommentsView = {template: '<customerCommentsView/>'}
+const ManagerCommentsView = {template: '<managerCommentsView/>'}
+const AdministratorAprovedAndDeniedCommentsView = {template: '<administratorAprovedAndDeniedCommentsView/>'}
 
 
 const router = new VueRouter({
@@ -56,13 +58,15 @@ const router = new VueRouter({
     {path: '/defineTerm',name: 'DefineTerm', component: DefineTerm},
     {path: '/customerCreateComment',name: 'CustomerCreateComment', component: CustomerCreateComment},
     {path: '/administratorCommentsView',name: 'AdministratorCommentsView', component: AdministratorCommentsView},
-    {path: '/customerCommentsView',name: 'CustomerCommentsView', component: CustomerCommentsView}
+    {path: '/customerCommentsView',name: 'CustomerCommentsView', component: CustomerCommentsView},
+    {path: '/managerCommentsView',name: 'ManagerCommentsView', component: ManagerCommentsView},
+    {path: '/administratorAprovedAndDeniedCommentsView',name: 'AdministratorAprovedAndDeniedCommentsView', component: AdministratorAprovedAndDeniedCommentsView}
 	  ]
 });
 
 const protectedRoutes = ['EditUser', 'AllWorkouts']
-const adminRoutes = ['Admin', 'EditUser', 'AllUsers', 'NewFacility', 'AdministratorCommentsView']
-const managerRoutes = ['Manager', 'NewContent', 'EditContent', 'DisplayContentsForEdit', 'ManagerTrainingsView', 'ManagerSportFacilityView', 'DefineTerm']
+const adminRoutes = ['Admin', 'EditUser', 'AllUsers', 'NewFacility', 'AdministratorCommentsView', 'AdministratorAprovedAndDeniedCommentsView']
+const managerRoutes = ['Manager', 'NewContent', 'EditContent', 'DisplayContentsForEdit', 'ManagerTrainingsView', 'ManagerSportFacilityView', 'DefineTerm', 'ManagerCommentsView']
 const customerRoutes = ['Customer', 'CustomerTrainingsView', 'SchedulingTraining', 'CreateMembership', 'CustomerCreateComment', 'CustomerCommentsView']
 const coachRoutes = ['Coach', 'CoachTrainingsView', 'ScheduledTrainingsViewAndDelete']
 

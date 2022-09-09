@@ -26,6 +26,7 @@ Vue.component('manager', {
 		<a href="/#/managerSportFacilityView">Pregled sportskog objekta</a><br/>
 		<a href="/#/allWorkouts">Pregled svih treninga</a><br/>
 		<a href="/#/defineTerm">Definisanje termina</a><br/>
+		<a href="/#/managerCommentsView">Pregled odobrenih i odbijenih komentara</a><br/>
 	</div>                   
 `
 })

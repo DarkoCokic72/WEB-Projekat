@@ -526,6 +526,16 @@ public class MainApp {
 			res.type("application/json");
 			return gson.toJson(commentService.getAprovedComments());
 		});
+		
+		get("/manager/getAprovedAndDeniedComments", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(commentService.getAprovedAndDeniedComments());
+		});
+		
+		get("/admin/getAprovedAndDeniedComments", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(commentService.getAprovedAndDeniedComments());
+		});
 	}
 
 }

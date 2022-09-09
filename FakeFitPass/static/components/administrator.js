@@ -24,6 +24,7 @@ Vue.component('administrator', {
 		<a href="/#/newFacility">Novi sportski objekat</a><br/>
 		<a href="/#/allWorkouts">Pregled svih treninga</a><br/>
 		<a href="/#/administratorCommentsView">Prihvatanje i odbijanje komentara</a><br/>
+		<a href="/#/administratorAprovedAndDeniedCommentsView">Pregled odobrenih i odbijenih komentara</a><br/>
 	</div>                   
 `
 })
