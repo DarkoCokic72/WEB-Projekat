@@ -18,6 +18,7 @@ public class ScheduledWorkoutService {
 	private ScheduledWorkoutRepository scheduledWorkoutRepository = new ScheduledWorkoutRepository();
 	private WorkoutHistoryRepository workoutHistoryRepository = new WorkoutHistoryRepository();
 	private CustomerRepository customerRepository = new CustomerRepository();
+	private MembershipService membershipService = new MembershipService();
 	private IdGenerator idGenerator = new IdGenerator();
 	
 	public void addScheduledWorkout(ScheduledWorkoutDTO scheduledWorkoutDTO) {

@@ -14,6 +14,7 @@ import java.util.List;
 
 import beans.Customer;
 import beans.IdGenerator;
+import beans.SportFacility;
 import beans.TypeOfFacility;
 import beans.TypeOfWorkout;
 import beans.Workout;
@@ -33,6 +34,7 @@ public class WorkoutHistoryService {
 	private CustomerRepository customerRepository = new CustomerRepository();
 	private SportFacilityRepository sportFacilityRepository = new SportFacilityRepository();
 	private ScheduledWorkoutRepository scheduledWorkoutRepository = new ScheduledWorkoutRepository();
+	private MembershipService membershipService = new MembershipService();
 	private IdGenerator idGenerator = new IdGenerator();
 	private int counter = 0;
 	
@@ -136,5 +138,45 @@ public class WorkoutHistoryService {
 	
 	public boolean defineTerm(Customer customer, Workout workout) {
 		return workoutHistoryRepository.addOne(new WorkoutHistory(idGenerator.generateRandomKey(4), LocalDateTime.now(), workout, customer, workout.getCoach()));
+	}
+	
+	public int findNumberOfUsedTerms(Customer customer) {
+		int counter = 0;
+		for(WorkoutHistory workoutHistory: workoutHistoryRepository.getAll()) {
+			if(workoutHistory.getCustomer().getUsername().equals(customer.getUsername())) {
+				if(workoutHistory.getTimeOfCheckIn().isAfter(convertToLocalDateTimeViaInstant(membershipService.findMembershipById(customer.getUsername()).getDateOfPayment())) && 
+						workoutHistory.getTimeOfCheckIn().isBefore(membershipService.findMembershipById(customer.getUsername()).getPeriodOfValidity())) {
+					counter++;
+				}
+			}
+		}
+		return counter;
+	}
+	
+	private LocalDateTime convertToLocalDateTimeViaInstant(Date dateToConvert) {
+	    return dateToConvert.toInstant()
+	      .atZone(ZoneId.systemDefault())
+	      .toLocalDateTime();
+	}
+	
+	public List<SportFacility> getAllVisitedSportFacilities(String username){
+		List<SportFacility> facilities = new ArrayList<SportFacility>();
+		for(WorkoutHistory workoutHistory: workoutHistoryRepository.getAll()) {
+			if(workoutHistory.getCustomer().getUsername().equals(username)) {
+				if(isFacilityDuplicated(workoutHistory.getWorkout().getSportFacility().getName(), facilities)) {
+					facilities.add(workoutHistory.getWorkout().getSportFacility());
+				}
+			}
+		}
+		return facilities;
+	}
+	
+	private boolean isFacilityDuplicated(String sportFacilityName, List<SportFacility> facilities) {
+		for(SportFacility sportFacility: facilities) {
+			if(sportFacility.getName().equals(sportFacilityName)) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

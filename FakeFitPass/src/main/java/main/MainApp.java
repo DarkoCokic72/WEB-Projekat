@@ -23,12 +23,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import beans.Coach;
+import beans.Comment;
 import beans.IdGenerator;
 import beans.Manager;
 import beans.SportFacility;
 import beans.User;
 import beans.Workout;
 import beans.WorkoutHistory;
+import dto.CommentDTO;
 import dto.CustomerAndWorkoutDTO;
 import dto.LoggedInUserDTO;
 import dto.ScheduledWorkoutDTO;
@@ -47,6 +49,7 @@ import repository.ManagerRepository;
 import repository.SportFacilityRepository;
 import repository.WorkoutHistoryRepository;
 import repository.WorkoutRepository;
+import service.CommentService;
 import service.ManagerService;
 import service.MembershipDTOService;
 import service.MembershipService;
@@ -73,6 +76,7 @@ public class MainApp {
 	private static ScheduledWorkoutService scheduledWorkoutService = new ScheduledWorkoutService();
 	private static MembershipDTOService membershipDTOService = new MembershipDTOService();
 	private static MembershipService membershipService = new MembershipService();
+	private static CommentService commentService = new CommentService();
 	private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 	private static IdGenerator idGenerator = new IdGenerator();
 
@@ -465,10 +469,37 @@ public class MainApp {
 			Gson gson = new GsonBuilder().create();
 			CustomerAndWorkoutDTO customerAndWorkoutDTO = gson.fromJson(req.body(), CustomerAndWorkoutDTO.class);
 			if(membershipService.findMembershipById(customerAndWorkoutDTO.getCustomerId()).getStatus() == false || membershipService.findMembershipById(customerAndWorkoutDTO.getCustomerId()).getNumberOfAppointments() <= 0) {
+				customerRepository.setTypeOfCustomer(workoutHistoryService.findNumberOfUsedTerms(customerRepository.getOne(customerAndWorkoutDTO.getCustomerId())), customerRepository.getOne(customerAndWorkoutDTO.getCustomerId()));
 				return false;
 			}
 			membershipService.decreaseNumberOfAppointments(membershipService.findMembershipById(customerAndWorkoutDTO.getCustomerId()));
 			return gson.toJson(workoutHistoryService.defineTerm(customerRepository.getOne(customerAndWorkoutDTO.getCustomerId()), workoutService.findWorkoutById(customerAndWorkoutDTO.getWorkoutId())));
+		});
+		
+		get("/customer/customerMembership", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(membershipService.findMembershipById(getUsername(req.headers("Authorization"))));
+		});
+		
+		put("/manager/decreaseNumberOfAppointments", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(membershipService.decreaseNumberOfAppointmentsByOne());
+		});
+		
+		get("/customer/getCustomer", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(customerRepository.getOne(getUsername(req.headers("Authorization"))));
+		});
+		
+		get("/customer/allVisitedSportFacilities", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(workoutHistoryService.getAllVisitedSportFacilities(getUsername(req.headers("Authorization"))));
+		});
+		
+		post("/customer/createComment", (req, res) -> {
+			res.type("application/json");
+			Gson gson = new GsonBuilder().create();
+			return gson.toJson(commentService.addNewComment(new Comment(idGenerator.generateRandomKey(4), gson.fromJson(req.body(), CommentDTO.class))));
 		});
 	}
 

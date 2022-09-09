@@ -1,9 +1,10 @@
-package beans;
+package dto;
 
-import dto.CommentDTO;
+import beans.Customer;
+import beans.SportFacility;
 
-public class Comment {
-	private String id;
+public class CommentDTO {
+
 	private Customer customer;
 	private SportFacility sportFacility;
 	private String text;
@@ -11,28 +12,15 @@ public class Comment {
 	private boolean isAproved;
 	private boolean isDenied;
 	
-	public Comment() {}
-	
-	public Comment(String id, Customer customer, SportFacility sportFacility, String text, int score, boolean isAproved, boolean isDenied) {
+	public CommentDTO(Customer customer, SportFacility sportFacility, String text, int score, boolean isAproved,
+			boolean isDenied) {
 		super();
-		this.id = id;
 		this.customer = customer;
 		this.sportFacility = sportFacility;
 		this.text = text;
 		this.score = score;
 		this.isAproved = isAproved;
 		this.isDenied = isDenied;
-	}
-	
-	public Comment(String id, CommentDTO commentDTO) {
-		super();
-		this.id = id;
-		this.customer = commentDTO.getCustomer();
-		this.sportFacility = commentDTO.getSportFacility();
-		this.text = commentDTO.getText();
-		this.score = commentDTO.getScore();
-		this.isAproved = commentDTO.getIsAproved();
-		this.isDenied = commentDTO.getIsDenied();
 	}
 
 	public Customer getCustomer() {
@@ -67,7 +55,7 @@ public class Comment {
 		this.score = score;
 	}
 
-	public boolean isAproved() {
+	public boolean getIsAproved() {
 		return isAproved;
 	}
 
@@ -75,20 +63,12 @@ public class Comment {
 		this.isAproved = isAproved;
 	}
 
-	public boolean isDenied() {
+	public boolean getIsDenied() {
 		return isDenied;
 	}
 
 	public void setDenied(boolean isDenied) {
 		this.isDenied = isDenied;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 	
 	

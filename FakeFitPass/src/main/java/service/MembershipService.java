@@ -7,14 +7,20 @@ import beans.Customer;
 import beans.IdGenerator;
 import beans.Membership;
 import beans.TypeOfMembership;
+import beans.WorkoutHistory;
 import dto.MembershipDTO;
+import dto.ScheduledWorkoutDTO;
 import repository.CustomerRepository;
 import repository.MembershipRepository;
+import repository.ScheduledWorkoutRepository;
+import repository.WorkoutHistoryRepository;
 
 public class MembershipService {
 
 	private MembershipRepository membershipRepository = new MembershipRepository();
 	private CustomerRepository customerRepository = new CustomerRepository();
+	private ScheduledWorkoutRepository scheduledWorkoutRepository = new ScheduledWorkoutRepository();
+	private WorkoutHistoryRepository workoutHistoryRepository = new WorkoutHistoryRepository();
 	private IdGenerator idGenerator = new IdGenerator();
 	
 	public String addMembership(String username, MembershipDTO membershipDTO) {
@@ -58,6 +64,28 @@ public class MembershipService {
 			if(membership.getNumberOfAppointments() == 0 || membership.getPeriodOfValidity().compareTo(LocalDateTime.now()) <= 0) {
 				membership.setStatus(false);
 				membershipRepository.update(membership.getMembershipID(), membership);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean decreaseNumberOfAppointmentsByOne() {
+		for(ScheduledWorkoutDTO scheduledWorkout: scheduledWorkoutRepository.getAll()) {
+			if(scheduledWorkout.getDateTimeOfWorkout().isBefore(LocalDateTime.now()) || scheduledWorkout.getDateTimeOfWorkout().equals(LocalDateTime.now())) {
+				workoutHistoryRepository.addOne(new WorkoutHistory(idGenerator.generateRandomKey(4), scheduledWorkout.getDateTimeOfWorkout(), scheduledWorkout.getWorkout(), customerRepository.getOne(scheduledWorkout.getUsername()), scheduledWorkout.getWorkout().getCoach()));
+				cancelWorkout(scheduledWorkout.getId());
+				decreaseNumberOfAppointments(findMembershipById(scheduledWorkout.getUsername()));
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean cancelWorkout(String id) {
+		for(ScheduledWorkoutDTO scheduledWorkout: scheduledWorkoutRepository.getAll()) {
+			if(scheduledWorkout.getId().equals(id)) {
+				scheduledWorkoutRepository.delete(id);
 				return true;
 			}
 		}

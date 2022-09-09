@@ -36,6 +36,17 @@ Vue.component('schedulingTraining', {
 		
 	},
 	mounted (){
+		axios.get("/customer/customerMembership",{
+            contentType:"application/json",
+            dataType:"json",
+          })
+        .then(response => {
+                if(response.data.status === false){
+					alert("Vaša članarina je istekla, stoga Vam je ova opcija onemogućena.");
+					this.$router.push('/mainPage');
+				} 
+        })
+
         axios.get("/customer/allPersonalWorkouts",{
             contentType:"application/json",
             dataType:"json",

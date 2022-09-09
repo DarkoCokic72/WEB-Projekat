@@ -27,6 +27,7 @@ Vue.component('defineTerm', {
 			if (!response.data) {
 				alert("Neuspešno definisan termin, pošto je kupcu istekla članarina ili nema dovoljno termina.");
 				e.preventDefault();
+                this.$router.push('/mainPage');
 			}
 			else {
 				alert("Uspešno definisan termin.");
@@ -53,6 +54,14 @@ Vue.component('defineTerm', {
         })
 
         axios.put("/manager/changeStatus",{
+            contentType:"application/json",
+            dataType:"json",
+          })
+        .then(response => {
+                
+        })
+
+        axios.put("/manager/decreaseNumberOfAppointments",{
             contentType:"application/json",
             dataType:"json",
           })
