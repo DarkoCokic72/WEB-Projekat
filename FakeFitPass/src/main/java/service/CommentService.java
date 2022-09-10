@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import beans.Comment;
+import beans.SportFacility;
 import repository.CommentRepository;
+import repository.SportFacilityRepository;
 
 public class CommentService {
 
 	private CommentRepository commentRepository = new CommentRepository();
+	private SportFacilityRepository sportFacilityRepository = new SportFacilityRepository();
 	
 	public boolean addNewComment(Comment comment) {
 		return commentRepository.addOne(comment);
@@ -28,6 +31,7 @@ public class CommentService {
 		Comment comment = commentRepository.getOne(id);
 		comment.setIsDenied(true);
 		commentRepository.update(id, comment);
+		countAverageScore(comment.getScore(), comment.getSportFacility());
 		return true;
 	}
 	
@@ -35,7 +39,22 @@ public class CommentService {
 		Comment comment = commentRepository.getOne(id);
 		comment.setIsAproved(true);
 		commentRepository.update(id, comment);
+		countAverageScore(comment.getScore(), comment.getSportFacility());
 		return true;
+	}
+	
+	private void countAverageScore(int score, SportFacility sportFacility) {
+		int sum = 0;
+        int counter = 0;
+        for (Comment comment : commentRepository.getAll()) {
+            if (comment.getSportFacility().getName().equals(sportFacility.getName())) {
+                sum += comment.getScore();
+                counter++;
+            }
+        }
+        double averageScore = (double)sum / (double)counter;
+		sportFacility.setAverageScore(averageScore);
+		sportFacilityRepository.update(sportFacility.getName(), sportFacility);
 	}
 	
 	public List<Comment> getAprovedComments(String sportFacilityName){

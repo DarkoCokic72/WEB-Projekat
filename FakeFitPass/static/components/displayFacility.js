@@ -5,6 +5,22 @@ Vue.component('displayFacility', {
             comments: null
         }
     },
+    methods: {
+        showMap : function() {
+            var map = new ol.Map({
+            target: 'map',
+            layers: [
+              new ol.layer.Tile({
+                source: new ol.source.OSM()
+              })
+            ],
+            view: new ol.View({
+              center: ol.proj.fromLonLat([this.facility.location.longitude, this.facility.location.latitude]),
+              zoom: 18
+            })
+          });
+        }
+    },
     beforeMount(){
         axios.get("/facilityByName?name=" + this.$route.params.name, {})
         .then(response => {
@@ -43,11 +59,13 @@ Vue.component('displayFacility', {
             {{facility.location.street}} {{facility.location.number}},&nbsp;
             Koordinate:
             {{facility.location.longitude}} {{facility.location.latitude}}
+            <button v-on:click="showMap()">Show</button>
         </h3>
         <h3>
             Ocena:
             {{facility.averageScore}}
         </h3>
+        <div id="map" class="map"></div>
         <h1>Komentari o sportskom objektu:</h1>
         <div v-if="comments.length === 0"><h3>Još uvek ne postoje komentari za sportski objekat!</h3></div>
         <div v-else>
