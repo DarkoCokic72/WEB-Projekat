@@ -26,6 +26,7 @@ Vue.component('administrator', {
 		<a href="/#/administratorCommentsView">Prihvatanje i odbijanje komentara</a><br/>
 		<a href="/#/administratorAprovedAndDeniedCommentsView">Pregled odobrenih i odbijenih komentara</a><br/>
 		<a href="/#/administratorLogicalDeletion">Logičko brisanje</a><br/>
+		<a href="/#/administratorCreatePromoCode">Definisanje promo kodova</a><br/>
 	</div>                   
 `
 })

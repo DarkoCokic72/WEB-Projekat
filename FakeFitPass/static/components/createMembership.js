@@ -41,6 +41,28 @@ Vue.component('createMembership', {
                         this.$router.push('/mainPage');
 					}
 				})
+		},
+
+        submit : function() {
+			if (this.code === "") {
+				alert("Morate uneti promo kod!");
+				return;
+			}
+			
+			axios
+			.post('/customer/checkPromoCode', {
+				promoCode: this.code,
+				membershipId: this.membershipId
+			})
+			.then(response => { 
+				if (response.data === "") {
+					alert("Kod nije ispravan!");
+					return;
+				}
+				this.promoCodeUsed = true;
+				this.membership = response.data; 
+				alert("Dobili ste popust!");
+			});
 		}
 		
 	},
@@ -80,6 +102,10 @@ Vue.component('createMembership', {
             {{membership.price}}<br/>
             <label>Broj termina članarine:</label>
             {{membership.numberOfAppointments}}<br/><br/>
+            <div v-if="!promoCodeUsed">
+            <label>Promo kod (opciono)</label>
+            <input type="text" v-model="code">&nbsp;<button v-on:click="submit()">Iskoristi kod</button>
+            </div><br/><br/>
             <button @click="buyMembership()">Plati</button> &nbsp;
             <button @click="back()">Nazad na odabir</button>
             </div>

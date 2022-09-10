@@ -1,17 +1,22 @@
 package service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
 import beans.Customer;
 import beans.IdGenerator;
 import beans.Membership;
+import beans.PromoCode;
 import beans.TypeOfMembership;
 import beans.WorkoutHistory;
+import dto.CheckPromoCodeDTO;
 import dto.MembershipDTO;
 import dto.ScheduledWorkoutDTO;
 import repository.CustomerRepository;
+import repository.MembershipDTORepository;
 import repository.MembershipRepository;
+import repository.PromoCodeRepository;
 import repository.ScheduledWorkoutRepository;
 import repository.WorkoutHistoryRepository;
 
@@ -21,6 +26,8 @@ public class MembershipService {
 	private CustomerRepository customerRepository = new CustomerRepository();
 	private ScheduledWorkoutRepository scheduledWorkoutRepository = new ScheduledWorkoutRepository();
 	private WorkoutHistoryRepository workoutHistoryRepository = new WorkoutHistoryRepository();
+	private PromoCodeRepository promoCodeRepository = new PromoCodeRepository();
+	private MembershipDTORepository membershipDTORepository = new MembershipDTORepository();
 	private IdGenerator idGenerator = new IdGenerator();
 	
 	public String addMembership(String username, MembershipDTO membershipDTO) {
@@ -95,5 +102,32 @@ public class MembershipService {
 	public void decreaseNumberOfAppointments(Membership membership) {
 		membership.setNumberOfAppointments(membership.getNumberOfAppointments() - 1);
 		membershipRepository.update(membership.getMembershipID(), membership);
+	}
+	
+	public MembershipDTO checkPromoCode(CheckPromoCodeDTO checkPromoCodeDTO) {
+		int cnt = 0;
+		double discount = 0;
+		String promoCodeId = "";
+		for(PromoCode promoCode: promoCodeRepository.getAll()) {
+			if (promoCode.getId().equals(checkPromoCodeDTO.getPromoCode()) && promoCode.getStartDate().compareTo(LocalDate.now()) <= 0 && promoCode.getEndDate().compareTo(LocalDate.now()) >= 0 && promoCode.getQuantity() > 0) {
+				cnt++;
+				discount = promoCode.getDiscountPercentage();
+				promoCodeId = promoCode.getId();
+				break;
+			}
+		}
+		
+		if (cnt == 0) {
+			return null;
+		}else {
+			MembershipDTO membershipDTO = membershipDTORepository.getOne(checkPromoCodeDTO.getMembershipId());
+			membershipDTO.setPrice(membershipDTO.getPrice()*((100 - discount)/100));
+			
+			PromoCode promoCode = promoCodeRepository.getOne(promoCodeId);
+			promoCode.setQuantity(promoCode.getQuantity() - 1);
+			promoCodeRepository.update(promoCodeId, promoCode);
+			
+			return new MembershipDTO(membershipDTO.getMembershipID(), membershipDTO.getType(), membershipDTO.getPrice(), membershipDTO.getNumberOfAppointments());
+		}
 	}
 }

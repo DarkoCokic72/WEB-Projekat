@@ -26,13 +26,16 @@ import beans.Coach;
 import beans.Comment;
 import beans.IdGenerator;
 import beans.Manager;
+import beans.PromoCode;
 import beans.SportFacility;
 import beans.User;
 import beans.Workout;
 import beans.WorkoutHistory;
+import dto.CheckPromoCodeDTO;
 import dto.CommentDTO;
 import dto.CustomerAndWorkoutDTO;
 import dto.LoggedInUserDTO;
+import dto.PromoCodeDTO;
 import dto.ScheduledWorkoutDTO;
 import dto.SchedulingWorkoutDTO;
 import dto.SportFacilityDTO;
@@ -53,6 +56,7 @@ import service.CommentService;
 import service.ManagerService;
 import service.MembershipDTOService;
 import service.MembershipService;
+import service.PromoCodeService;
 import service.ScheduledWorkoutService;
 import service.SportFacilityService;
 import service.UserService;
@@ -77,6 +81,7 @@ public class MainApp {
 	private static MembershipDTOService membershipDTOService = new MembershipDTOService();
 	private static MembershipService membershipService = new MembershipService();
 	private static CommentService commentService = new CommentService();
+	private static PromoCodeService promoCodeService = new PromoCodeService();
 	private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 	private static IdGenerator idGenerator = new IdGenerator();
 
@@ -436,7 +441,7 @@ public class MainApp {
 		
 		get("/customer/allMemberships", (req, res) -> {
 			res.type("application/json");
-			return gson.toJson(membershipDTOService.getAll());
+			return gson.toJson(membershipDTOService.getAll(customerRepository.getOne(getUsername(req.headers("Authorization")))));
 		});
 		
 		get("/customer/displayMembership", (req, res) -> {
@@ -560,6 +565,23 @@ public class MainApp {
 		delete("/admin/deleteFacility", (req, res) -> {
 			res.type("application/json");
 			return gson.toJson(sportFacilityService.deleteFacility(req.queryParams("name")));
+		});
+		
+		post("/admin/createPromoCode", (req, res) -> {
+			res.type("application/json");
+			Gson gson = new GsonBuilder().create();
+			PromoCodeDTO promoCodeDTO = gson.fromJson(req.body(), PromoCodeDTO.class);
+			PromoCode promoCode = new PromoCode(idGenerator.generateRandomKey(4), LocalDate.parse(promoCodeDTO.getStartDate()), LocalDate.parse(promoCodeDTO.getEndDate()), promoCodeDTO.getQuantity(), promoCodeDTO.getDiscountPercentage());
+			return gson.toJson(promoCodeService.addNewPromoCode(promoCode));
+		});
+		
+		post("/customer/checkPromoCode", (req, res) -> {
+			res.type("application/json");
+			Gson gson = new GsonBuilder().create();
+			CheckPromoCodeDTO checkPromoCodeDTO = gson.fromJson(req.body(), CheckPromoCodeDTO.class);
+			System.out.println(checkPromoCodeDTO.getMembershipId());
+			System.out.println(checkPromoCodeDTO.getPromoCode());
+			return gson.toJson(membershipService.checkPromoCode(checkPromoCodeDTO));
 		});
 	}
 

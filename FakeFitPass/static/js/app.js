@@ -28,6 +28,7 @@ const CustomerCommentsView = {template: '<customerCommentsView/>'}
 const ManagerCommentsView = {template: '<managerCommentsView/>'}
 const AdministratorAprovedAndDeniedCommentsView = {template: '<administratorAprovedAndDeniedCommentsView/>'}
 const AdministratorLogicalDeletion = {template: '<administratorLogicalDeletion/>'}
+const AdministratorCreatePromoCode = {template: '<administratorCreatePromoCode/>'}
 
 
 const router = new VueRouter({
@@ -62,12 +63,13 @@ const router = new VueRouter({
     {path: '/customerCommentsView',name: 'CustomerCommentsView', component: CustomerCommentsView},
     {path: '/managerCommentsView',name: 'ManagerCommentsView', component: ManagerCommentsView},
     {path: '/administratorAprovedAndDeniedCommentsView',name: 'AdministratorAprovedAndDeniedCommentsView', component: AdministratorAprovedAndDeniedCommentsView},
-    {path: '/administratorLogicalDeletion',name: 'AdministratorLogicalDeletion', component: AdministratorLogicalDeletion}
+    {path: '/administratorLogicalDeletion',name: 'AdministratorLogicalDeletion', component: AdministratorLogicalDeletion},
+    {path: '/administratorCreatePromoCode',name: 'AdministratorCreatePromoCode', component: AdministratorCreatePromoCode}
 	  ]
 });
 
 const protectedRoutes = ['EditUser', 'AllWorkouts']
-const adminRoutes = ['Admin', 'EditUser', 'AllUsers', 'NewFacility', 'AdministratorCommentsView', 'AdministratorAprovedAndDeniedCommentsView', 'AdministratorLogicalDeletion']
+const adminRoutes = ['Admin', 'EditUser', 'AllUsers', 'NewFacility', 'AdministratorCommentsView', 'AdministratorAprovedAndDeniedCommentsView', 'AdministratorLogicalDeletion', 'AdministratorCreatePromoCode']
 const managerRoutes = ['Manager', 'NewContent', 'EditContent', 'DisplayContentsForEdit', 'ManagerTrainingsView', 'ManagerSportFacilityView', 'DefineTerm', 'ManagerCommentsView']
 const customerRoutes = ['Customer', 'CustomerTrainingsView', 'SchedulingTraining', 'CreateMembership', 'CustomerCreateComment', 'CustomerCommentsView']
 const coachRoutes = ['Coach', 'CoachTrainingsView', 'ScheduledTrainingsViewAndDelete']
