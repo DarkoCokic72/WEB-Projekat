@@ -583,6 +583,16 @@ public class MainApp {
 			System.out.println(checkPromoCodeDTO.getPromoCode());
 			return gson.toJson(membershipService.checkPromoCode(checkPromoCodeDTO));
 		});
+		
+		get("/getScheduledWorkouts", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(scheduledWorkoutService.getScheduledWorkouts(req.queryParams("sportFacilityName")));
+		});
+		
+		delete("/deleteScheduledWorkouts", (req, res) -> {
+			res.type("application/json");
+			return gson.toJson(scheduledWorkoutService.deleteScheduledWorkouts());
+		});
 	}
 
 }

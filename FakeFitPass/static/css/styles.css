@@ -1,40 +1,119 @@
-
-table tr:nth-child(even){
-    background-color: rgb(231, 190, 190);
+html {
+    color: #2e2e2e;
+    font-family : "Cambria";
 }
 
-tr:hover td{
-    background-color: aquamarine;
+a {
+    font-weight: 600;
+    color: #0088d6;
+    transition: .3s;
 }
 
-tr th {
-    background-color: grey;
+a:hover,
+a:active,
+a:focus {
+    color: #004770;
+    outline: none;
+    text-decoration: none;
 }
 
-a:hover{
-    color: rgb(212, 62, 25)
-}
+.center 
+ {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+ }
 
-table {
-    border-style: solid ;
-    border-color: black;
-}
+ .textinput
+ {
+    margin: 1px;
+ }
 
-h1, h2, h3 {
-    font-family: Arial, Helvetica, sans-serif;
-    color: darkblue;
-}
+ .margin
+ {
+    margin: 3px;
+ }
 
-.open {
-    color: green;
-    font:bold;
-}
-td , th{
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+ table {
+     margin: 10px;
+    background-color: solid rgba(255,255,255, 255);
+    width: 70%;
+    text-align: left;
+  }
+  table tbody td {
+    font-size: 100%;
     padding: 5px;
-}
+    color: #2e2e2e;
+    text-align: center;
+    vertical-align: middle;
+  }
+  table tr:nth-child(even) {
+    background: #e6e6e6;
+  }
+  table thead {
+    background: #2e2e2e;
+  }
+  table thead th {
+    font-size: 150%;
+    font-weight: bold;
+    color: #FFFFFF;
+    margin: 14px;
+    padding: 10px;
+  }
 
-.map {
-    height: 400px;
-    width: 100%;
-}
+  .smalltable {
+    width: 20%;
+    justify-content: center;
+    align-items: center;
+  }
+  .open
+  {
+    color: green;
+  }
+  .closed
+  {
+    color: red;
+  }
+  
+  button {
+    padding: 5px 25px;
+    cursor: pointer;
+    
+      border-radius: 5px;
+    font-weight: bold;
+      background-color: #2e2e2e;
+      border-color: #2e2e2e;
+      color: #ffffff;
+    
+      transition: all 0.3s;
+    
+    }
+
+    input[type="submit"] {
+        padding: 5px 25px;
+        cursor: pointer;
+        
+          border-radius: 5px;
+        font-weight: bold;
+          background-color: #2e2e2e;
+          border-color: #2e2e2e;
+          color: #ffffff;
+        
+          transition: all 0.3s;
+
+    }
+
+    .map {
+        height: 400px;
+        width: 100%;
+    }
+
+    tr:hover td{
+        background-color: aquamarine;
+    }
+
+    .cursor{
+        cursor: pointer
+    }

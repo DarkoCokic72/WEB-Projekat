@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import beans.Coach;
+import beans.SportFacility;
 import beans.TypeOfWorkout;
 import beans.Workout;
 import repository.CoachRepository;
+import repository.LogicalEntity;
 import repository.SportFacilityRepository;
 import repository.WorkoutRepository;
 
@@ -27,7 +29,11 @@ public class WorkoutService {
 		for(Workout workout: workoutRepository.getAll()) {
 			if(workout.getCoach().getUsername().equals(username)) {
 				if(workout.getType().equals(TypeOfWorkout.Personal) || workout.getType().equals(TypeOfWorkout.Group)) {
-					workouts.add(workout);
+					for(LogicalEntity<SportFacility> sportFacility: sportFacilityRepository.getAllLogical()) {
+						if(workout.getSportFacility().getName().equals(sportFacility.entity.getName()) && sportFacility.deleted == false) {
+							workouts.add(workout);
+						}
+					}
 				}
 			}
 		}
@@ -38,7 +44,11 @@ public class WorkoutService {
 		List<Workout> workouts = new ArrayList<Workout>();
 		for(Workout workout: workoutRepository.getAll()) {
 			if(workout.getSportFacility().getName().equals(sportFacilityName)) {
-				workouts.add(workout);
+				for(LogicalEntity<SportFacility> sportFacility: sportFacilityRepository.getAllLogical()) {
+					if(workout.getSportFacility().getName().equals(sportFacility.entity.getName()) && sportFacility.deleted == false) {
+						workouts.add(workout);
+					}
+				}
 			}
 		}
 		return workouts;
@@ -48,7 +58,11 @@ public class WorkoutService {
 		List<Workout> workouts = new ArrayList<Workout>();
 		for(Workout workout: workoutRepository.getAll()) {
 			if(workout.getType().equals(TypeOfWorkout.Personal)) {
-				workouts.add(workout);
+				for(LogicalEntity<SportFacility> sportFacility: sportFacilityRepository.getAllLogical()) {
+					if(workout.getSportFacility().getName().equals(sportFacility.entity.getName()) && sportFacility.deleted == false) {
+						workouts.add(workout);
+					}
+				}
 			}
 		}
 		return workouts;
@@ -57,7 +71,11 @@ public class WorkoutService {
 	public Workout findWorkoutById(String id) {
 		for(Workout workout: workoutRepository.getAll()) {
 			if(workout.getId().equals(id)) {
-				return workout;
+				for(LogicalEntity<SportFacility> sportFacility: sportFacilityRepository.getAllLogical()) {
+					if(workout.getSportFacility().getName().equals(sportFacility.entity.getName()) && sportFacility.deleted == false) {
+						return workout;
+					}
+				}
 			}
 		}
 		return null;
@@ -66,7 +84,11 @@ public class WorkoutService {
 	public String findCoachOfWorkoutById(String id) {
 		for(Workout workout: workoutRepository.getAll()) {
 			if(workout.getId().equals(id)) {
-				return workout.getCoach().getUsername();
+				for(LogicalEntity<SportFacility> sportFacility: sportFacilityRepository.getAllLogical()) {
+					if(workout.getSportFacility().getName().equals(sportFacility.entity.getName()) && sportFacility.deleted == false) {
+						return workout.getCoach().getUsername();
+					}
+				}
 			}
 		}
 		return null;
@@ -76,7 +98,11 @@ public class WorkoutService {
 		List<Coach> coaches = new ArrayList<Coach>();
 		for(Workout workout: workoutRepository.getAll()) {
 			if(workout.getSportFacility().getName().equals(sportFacilityName)) {
-				coaches.add(workout.getCoach());
+				for(LogicalEntity<SportFacility> sportFacility: sportFacilityRepository.getAllLogical()) {
+					if(workout.getSportFacility().getName().equals(sportFacility.entity.getName()) && sportFacility.deleted == false) {
+						coaches.add(workout.getCoach());
+					}
+				}
 			}
 		}
 		return coaches;
@@ -86,7 +112,11 @@ public class WorkoutService {
 		List<Workout> workouts = new ArrayList<Workout>();
 		for(Workout workout: workoutRepository.getAll()) {
 			if(workout.getSportFacility().getName().equals(sportFacilityName)) {
-				workouts.add(workout);
+				for(LogicalEntity<SportFacility> sportFacility: sportFacilityRepository.getAllLogical()) {
+					if(workout.getSportFacility().getName().equals(sportFacility.entity.getName()) && sportFacility.deleted == false) {
+						workouts.add(workout);
+					}
+				}
 			}
 		}
 		return null;

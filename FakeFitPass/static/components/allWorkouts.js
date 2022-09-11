@@ -138,9 +138,9 @@ Vue.component('allWorkouts', {
             <table id="table" border="1">
                 <thead>
                     <tr>
-                        <th @click="sortTable('workout.sportFacility.name')">Naziv sportskog objekta</th>
+                        <th @click="sortTable('workout.sportFacility.name')" class="cursor">Naziv sportskog objekta</th>
                         <th>Tip sportskog objekta</th>
-                        <th @click="sortDates()">Datum prijave treninga</th>
+                        <th @click="sortDates()" class="cursor">Datum prijave treninga</th>
                         <th>Naziv treninga</th>
                         <th>Tip treninga</th>
                     </tr>

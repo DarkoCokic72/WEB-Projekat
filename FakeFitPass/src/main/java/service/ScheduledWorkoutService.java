@@ -66,4 +66,25 @@ public class ScheduledWorkoutService {
 		}
 		return false;
 	}
+	
+	public List<ScheduledWorkoutDTO> getScheduledWorkouts(String sportFacilityName){
+		List<ScheduledWorkoutDTO> workouts = new ArrayList<ScheduledWorkoutDTO>();
+		for(ScheduledWorkoutDTO scheduledWorkoutDTO: scheduledWorkoutRepository.getAll()) {
+			if(scheduledWorkoutDTO.getWorkout().getSportFacility().getName().equals(sportFacilityName)) {
+				workouts.add(scheduledWorkoutDTO);
+			}
+		}
+		return workouts;
+	}
+	
+	public boolean deleteScheduledWorkouts() {
+		for(ScheduledWorkoutDTO scheduledWorkoutDTO: scheduledWorkoutRepository.getAll()) {
+			if(scheduledWorkoutDTO.getDateTimeOfWorkout().isBefore(LocalDateTime.now()) || scheduledWorkoutDTO.getDateTimeOfWorkout().equals(LocalDateTime.now())) {
+				workoutHistoryRepository.addOne(new WorkoutHistory(idGenerator.generateRandomKey(4), scheduledWorkoutDTO.getDateTimeOfWorkout(), scheduledWorkoutDTO.getWorkout(), customerRepository.getOne(scheduledWorkoutDTO.getUsername()), scheduledWorkoutDTO.getWorkout().getCoach()));
+				cancelWorkout(scheduledWorkoutDTO.getId());
+				return true;
+			}
+		}
+		return false;
+	}
 }

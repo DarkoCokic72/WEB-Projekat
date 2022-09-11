@@ -38,7 +38,7 @@ Vue.component('administratorCreatePromoCode', {
     `
         <div>
             <h1>Definisanje promo kodova</h1>
-            <table>
+            <table id="table" border="1">
                 <tr>
                     <td><label for="startDate">Start date:</label></td>
                     <td><input type="date" v-model="startDate" id="startDate"></td>

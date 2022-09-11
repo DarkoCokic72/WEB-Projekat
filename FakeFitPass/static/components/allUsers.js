@@ -116,13 +116,13 @@ Vue.component('allUsers', {
             <table id="table">
                 <thead>
                     <tr>
-                        <th v-on:click="sortTable('username')">
+                        <th v-on:click="sortTable('username')" class="cursor">
                             Korisničko ime
                         </th>
-                        <th v-on:click="sortTable('name')">
+                        <th v-on:click="sortTable('name')" class="cursor">
                             Ime
                         </th>
-                        <th v-on:click="sortTable('surname')">
+                        <th v-on:click="sortTable('surname')" class="cursor">
                             Prezime
                         </th>
                         <th>
@@ -162,7 +162,8 @@ Vue.component('allUsers', {
                         <td v-else>
                             Kupac
                         </td>
-                        <td>{{user.collectedPoints}}</td>
+                        <td v-if="user.role === 'Customer'">{{user.collectedPoints}}</td>
+                        <td v-if="user.role !== 'Customer'">Nema podatak</td>
                         <td><button @click="logicalDeletion(user.username)">Obriši</button></td>
                     </tr>
                 </tbody>

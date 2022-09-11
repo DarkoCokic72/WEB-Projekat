@@ -23,6 +23,7 @@ import dto.ScheduledAndWorkoutHistoryWorkoutsDTO;
 import dto.ScheduledWorkoutDTO;
 import repository.CoachRepository;
 import repository.CustomerRepository;
+import repository.LogicalEntity;
 import repository.ScheduledWorkoutRepository;
 import repository.SportFacilityRepository;
 import repository.WorkoutHistoryRepository;
@@ -49,7 +50,11 @@ public class WorkoutHistoryService {
 		for(WorkoutHistory workoutHistory : workoutHistoryRepository.getAll()) {
 			if(workoutHistory.getCustomer().getUsername().equals(username)) {
 				if(LocalDateTime.now().minusMonths(1).compareTo(workoutHistory.getTimeOfCheckIn()) <= 0) {
-					historyOfWorkoutsInLastMonth.add(workoutHistory);
+					for(LogicalEntity<Customer> customer: customerRepository.getAllLogical()) {
+						if(workoutHistory.getCustomer().getUsername().equals(customer.entity.getUsername()) && customer.deleted == false) {
+							historyOfWorkoutsInLastMonth.add(workoutHistory);
+						}
+					}
 				}
 			}
 		}
@@ -61,7 +66,11 @@ public class WorkoutHistoryService {
 		for(WorkoutHistory workoutHistory: workoutHistoryRepository.getAll()) {
 			if(workoutHistory.getWorkout().getSportFacility().getName().equals(sportFacilityName)) {
 				if(isCustomerAlreadyInCustomers(workoutHistory.getCustomer().getUsername(), customers)) {
-					customers.add(workoutHistory.getCustomer());
+					for(LogicalEntity<Customer> customer: customerRepository.getAllLogical()) {
+						if(workoutHistory.getCustomer().getUsername().equals(customer.entity.getUsername()) && customer.deleted == false) {
+							customers.add(workoutHistory.getCustomer());
+						}
+					}
 				}
 			}
 		}
@@ -146,7 +155,11 @@ public class WorkoutHistoryService {
 			if(workoutHistory.getCustomer().getUsername().equals(customer.getUsername())) {
 				if(workoutHistory.getTimeOfCheckIn().isAfter(convertToLocalDateTimeViaInstant(membershipService.findMembershipById(customer.getUsername()).getDateOfPayment())) && 
 						workoutHistory.getTimeOfCheckIn().isBefore(membershipService.findMembershipById(customer.getUsername()).getPeriodOfValidity())) {
-					counter++;
+					for(LogicalEntity<Customer> customerr: customerRepository.getAllLogical()) {
+						if(workoutHistory.getCustomer().getUsername().equals(customerr.entity.getUsername()) && customerr.deleted == false) {
+							counter++;
+						}
+					}
 				}
 			}
 		}

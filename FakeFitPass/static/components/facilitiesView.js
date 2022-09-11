@@ -121,13 +121,12 @@ Vue.component('facilitiesView', {
             <table id="table" border="1">
                 <thead>
                     <tr>
-                        <th v-on:click="sortTable('name')">Naziv</th>
+                        <th v-on:click="sortTable('name')" class="cursor">Naziv</th>
                         <th>Tip objekta</th>
-                        <th v-on:click="sortTable('location.street')">Lokacija</th>
+                        <th v-on:click="sortTable('location.street')" class="cursor">Lokacija</th>
                         <th>Logo</th>
-                        <th>Radno vreme</th>
                         <th>Status</th>
-                        <th v-on:click="sortTable('averageScore')">Prosečna ocena</th>
+                        <th v-on:click="sortTable('averageScore')" class="cursor">Prosečna ocena</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -142,8 +141,21 @@ Vue.component('facilitiesView', {
                         <td>
                             <img :src="facility.image"/>
                         </td>
-                        <td>{{facility.startTime.time.hour}} - {{facility.endTime.time.hour}}</td>
                         <td class="open">Otvoren</td>
+                        <td>{{facility.averageScore}}/5</td>
+                    </tr>
+                    <tr v-for="facility in filteredFacilities" v-if="!facility.status" v-on:click="displayFacility(facility.name)">
+                        <td>{{facility.name}}</td>
+                        <td>{{facility.type}}</td>
+                        <td>{{facility.location.postalCode}} <br />
+                            {{facility.location.city}} <br />
+                            {{facility.location.street}} {{facility.location.number}} <br/>
+                            {{facility.location.longitude}} {{facility.location.latitude}}
+                        </td>
+                        <td>
+                            <img :src="facility.image"/>
+                        </td>
+                        <td class="closed">Zatvoren</td>
                         <td>{{facility.averageScore}}/5</td>
                     </tr>
                 </tbody>

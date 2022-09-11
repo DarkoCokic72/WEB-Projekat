@@ -6,8 +6,8 @@ Vue.component('home', {
 	template: `
 	<div>
 		<login class="center"/> <br/>
-		<h2>Naše teretane:</h2>
-		<facilitiesView />
+		<h2 class="center">Teretane u ponudi:</h2>
+		<facilitiesView class="center"/>
 	</div>
 `
 })
