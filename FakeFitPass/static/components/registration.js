@@ -41,6 +41,8 @@ Vue.component('registration', {
 			}else if(localStorage.getItem('registracijaNovog') === "true"){
 				if(this.role === "Customer"){
 					this.role = "Customer";
+				}else if(this.role === 'Coach'){
+					this.role = 'Coach';
 				}
 				else if(localStorage.getItem("currentFacility") !== "null"){
 					this.role = "Manager";

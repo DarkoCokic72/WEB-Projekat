@@ -114,6 +114,8 @@ public class MembershipService {
 				discount = promoCode.getDiscountPercentage();
 				promoCodeId = promoCode.getId();
 				break;
+			}else {
+				return null;
 			}
 		}
 		

@@ -27,6 +27,7 @@ import beans.Comment;
 import beans.IdGenerator;
 import beans.Manager;
 import beans.PromoCode;
+import beans.Role;
 import beans.SportFacility;
 import beans.User;
 import beans.Workout;
@@ -49,6 +50,7 @@ import repository.AdministratorRepository;
 import repository.CoachRepository;
 import repository.CustomerRepository;
 import repository.ManagerRepository;
+import repository.ScheduledWorkoutRepository;
 import repository.SportFacilityRepository;
 import repository.WorkoutHistoryRepository;
 import repository.WorkoutRepository;
@@ -82,6 +84,7 @@ public class MainApp {
 	private static MembershipService membershipService = new MembershipService();
 	private static CommentService commentService = new CommentService();
 	private static PromoCodeService promoCodeService = new PromoCodeService();
+	private static ScheduledWorkoutRepository scheduledWorkoutRepository = new ScheduledWorkoutRepository();
 	private static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 	private static IdGenerator idGenerator = new IdGenerator();
 
@@ -179,7 +182,7 @@ public class MainApp {
 			
 			String facilityName = req.queryParams("facility");
 			
-			if (!facilityName.equals("null")) {
+			if (!facilityName.equals("null") && user.getRole() == Role.Manager) {
 				managerRepository.setFacilityForManagerUsername(facilityName,
 						managerRepository.getOne(user.getUsername()));
 			}
@@ -307,10 +310,11 @@ public class MainApp {
 			String username = getUsername(req.headers("Authorization"));
 			String facilityName = managerRepository.getFacilityName(username);
 			
-			if(sportFacilityRepository.getWorkout(facilityName, workout.getName()) != null) {
+			if(sportFacilityRepository.getWorkout(facilityName, workout.getName()) != null && sportFacilityRepository.getWorkout(facilityName, workout.getName()).getType() == workout.getType()) {
 				return false;
 			}
 			sportFacilityRepository.addWorkoutToContent(facilityName, workout);
+			workoutService.addNewWorkout(facilityName, workout);
 			return true;
 		});
 		
@@ -338,6 +342,7 @@ public class MainApp {
 			String facilityName = managerRepository.getFacilityName(username);
 			
 			sportFacilityRepository.putEditedContent(facilityName, workout);
+			workoutService.editWorkout(facilityName, workout);
 			return true;
 		});
 		
@@ -372,7 +377,8 @@ public class MainApp {
 			ScheduledWorkoutDTO scheduledWorkoutDTO = new ScheduledWorkoutDTO(idGenerator.generateRandomKey(4), getUsername(req.headers("Authorization")),
 					userService.findByID(getUsername(req.headers("Authorization"))).getName(), userService.findByID(getUsername(req.headers("Authorization"))).getSurname(), 
 					workoutService.findWorkoutById(schedulingWorkoutDTO.getId()), LocalDateTime.parse(schedulingWorkoutDTO.getDateTimeOfWorkout()));
-			if(scheduledWorkoutService.findWorkoutByCoachAndTime(workoutService.findCoachOfWorkoutById(schedulingWorkoutDTO.getId()), scheduledWorkoutDTO.getDateTimeOfWorkout()) == true) {
+			if(scheduledWorkoutService.findWorkoutByCoachAndTime(workoutService.findCoachOfWorkoutById(schedulingWorkoutDTO.getId()), scheduledWorkoutDTO.getDateTimeOfWorkout()) == true
+					|| scheduledWorkoutService.isWorkoutValid(customerRepository.getOne(getUsername(req.headers("Authorization"))).getMembershipId(), scheduledWorkoutDTO)) {
 				return false;
 			}
 			scheduledWorkoutService.addScheduledWorkout(scheduledWorkoutDTO);
@@ -473,6 +479,9 @@ public class MainApp {
 			res.type("application/json");
 			Gson gson = new GsonBuilder().create();
 			CustomerAndWorkoutDTO customerAndWorkoutDTO = gson.fromJson(req.body(), CustomerAndWorkoutDTO.class);
+			if(membershipService.findMembershipById(customerAndWorkoutDTO.getCustomerId()) == null) {
+				return false;
+			}
 			if(membershipService.findMembershipById(customerAndWorkoutDTO.getCustomerId()).getStatus() == false || membershipService.findMembershipById(customerAndWorkoutDTO.getCustomerId()).getNumberOfAppointments() <= 0) {
 				customerRepository.setTypeOfCustomer(workoutHistoryService.findNumberOfUsedTerms(customerRepository.getOne(customerAndWorkoutDTO.getCustomerId())), customerRepository.getOne(customerAndWorkoutDTO.getCustomerId()));
 				return false;
@@ -579,8 +588,6 @@ public class MainApp {
 			res.type("application/json");
 			Gson gson = new GsonBuilder().create();
 			CheckPromoCodeDTO checkPromoCodeDTO = gson.fromJson(req.body(), CheckPromoCodeDTO.class);
-			System.out.println(checkPromoCodeDTO.getMembershipId());
-			System.out.println(checkPromoCodeDTO.getPromoCode());
 			return gson.toJson(membershipService.checkPromoCode(checkPromoCodeDTO));
 		});
 		

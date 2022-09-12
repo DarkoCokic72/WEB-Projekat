@@ -20,7 +20,7 @@ Vue.component('managerTrainingsView', {
 	template: 
     `
         <div>
-            <h1>Pregled svih treninga</h1>
+            <h1>Pregled sadržaja u sportskom objektu</h1>
             <table id="table" border="1">
                 <thead>
                     <tr>

@@ -18,13 +18,13 @@ Vue.component('displayContentForEdit', {
     },
     template: `
         <div> 
-            <h1>Izaberite trening koji zelite da promenite</h1>
+            <h1>Izaberite trening koji želite da promenite</h1>
             <table border = "1">
                 <thead>
                     <tr>
                         <th>Naziv treninga</th>
                         <th>Tip treninga</th>
-                        <th>Trajanje</th>
+                        <th>Trajanje(u satima)</th>
                         <th>Opis</th>
                         <th>Slika</th>
                     </tr>
@@ -43,7 +43,10 @@ Vue.component('displayContentForEdit', {
                         <td v-else>
                            Teretana
                         </td>
-                        <td>
+                        <td v-if="c.duration.time.minute === 0">
+                            {{c.duration.time.hour}}
+                        </td>
+                        <td v-else>
                             {{c.duration.time.hour}}:{{c.duration.time.minute}}
                         </td>
                         <td>

@@ -10,6 +10,7 @@ import beans.WorkoutHistory;
 import dto.ScheduledAndWorkoutHistoryWorkoutsDTO;
 import dto.ScheduledWorkoutDTO;
 import repository.CustomerRepository;
+import repository.MembershipRepository;
 import repository.ScheduledWorkoutRepository;
 import repository.WorkoutHistoryRepository;
 
@@ -19,6 +20,7 @@ public class ScheduledWorkoutService {
 	private WorkoutHistoryRepository workoutHistoryRepository = new WorkoutHistoryRepository();
 	private CustomerRepository customerRepository = new CustomerRepository();
 	private MembershipService membershipService = new MembershipService();
+	private MembershipRepository membershipRepository = new MembershipRepository();
 	private IdGenerator idGenerator = new IdGenerator();
 	
 	public void addScheduledWorkout(ScheduledWorkoutDTO scheduledWorkoutDTO) {
@@ -84,6 +86,13 @@ public class ScheduledWorkoutService {
 				cancelWorkout(scheduledWorkoutDTO.getId());
 				return true;
 			}
+		}
+		return false;
+	}
+	
+	public boolean isWorkoutValid(String membershipId, ScheduledWorkoutDTO scheduledWorkoutDTO) {
+		if(scheduledWorkoutDTO.getDateTimeOfWorkout().isAfter(membershipRepository.getOne(membershipId).getPeriodOfValidity())) {
+			return true;
 		}
 		return false;
 	}

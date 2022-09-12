@@ -50,11 +50,11 @@ Vue.component('newContent', {
         },
         checkRegistrationResponse: function(response, event) {
 			if (!response.data) {
-				alert("Neuspešna registracija sadrzaja.");
+				alert("Neuspešna registracija sadržaja.");
 				event.preventDefault();
 			}
 			else {
-				alert("Uspešno registrovan novi sadrzaj.");
+				alert("Uspešno registrovan novi sadržaj.");
 				this.$router.push('/mainPage');
 			}
 		}
@@ -75,7 +75,7 @@ Vue.component('newContent', {
     },
     template: `
         <div> 
-            <h1>Dodavanje novog sadrzaja</h1>
+            <h1>Dodavanje novog sadržaja</h1>
             <form action = "#/" method = "post" @submit = "checkForm">
                 <table>
                     <tr>

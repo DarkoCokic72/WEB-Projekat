@@ -23,23 +23,27 @@ Vue.component('editUser',{
 		},
         checkForm: function(e){
             e.preventDefault();
-            if(this.gender === "Muski"){
-                this.gender = "male";
-            }else{
-                this.gender = "female";
+            if(this.password.length < 8){
+				alert("Password mora sadržati najmanje 8 karaktera!");
+			}else{
+                if(this.gender === "Muski"){
+                    this.gender = "male";
+                }else{
+                    this.gender = "female";
+                }
+                axios.put('/editData', {
+                            username: this.username,
+                            password: this.password,
+                            name: this.name,
+                            surname: this.surname,
+                            gender: this.gender,
+                            dateOfBirth: this.dateOfBirth,
+                            role: this.role
+                        })
+                        .then(response => {
+                            this.checkEditResponse(response, e);
+                        });
             }
-            axios.put('/editData', {
-						username: this.username,
-						password: this.password,
-						name: this.name,
-						surname: this.surname,
-						gender: this.gender,
-						dateOfBirth: this.dateOfBirth,
-						role: this.role
-					})
-					.then(response => {
-                        this.checkEditResponse(response, e);
-                    });
         },
         editResponse: function(response){
 			this.username = response.data.username;
@@ -68,6 +72,8 @@ Vue.component('editUser',{
 	},
     template:
     `
+    <div>
+    <h1 class="center">Izmena podataka</h1>
     <form action="#/" @submit="checkForm" method="put" class="center">
         <table class="smalltable">
             <tr>
@@ -109,5 +115,6 @@ Vue.component('editUser',{
             </tr>
         </table>
     </form>  
+    </div>
     `
 })

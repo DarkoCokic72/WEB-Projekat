@@ -55,7 +55,7 @@ Vue.component('createMembership', {
 				membershipId: this.membershipId
 			})
 			.then(response => { 
-				if (response.data === "") {
+				if (response.data === null) {
 					alert("Kod nije ispravan!");
 					return;
 				}

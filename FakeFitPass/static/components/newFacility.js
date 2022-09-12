@@ -93,7 +93,8 @@ Vue.component('newFacility', {
     template:
     `
         <div>
-            <form action="#/" method="post" @submit="checkForm">
+            <h1 class="center">Dodaj novi sportski objekat</h1>
+            <form action="#/" method="post" @submit="checkForm" class="center">
                 <table>
                     <tr>
                         <td>Naziv</td>

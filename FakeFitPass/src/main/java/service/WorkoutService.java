@@ -98,14 +98,25 @@ public class WorkoutService {
 		List<Coach> coaches = new ArrayList<Coach>();
 		for(Workout workout: workoutRepository.getAll()) {
 			if(workout.getSportFacility().getName().equals(sportFacilityName)) {
-				for(LogicalEntity<SportFacility> sportFacility: sportFacilityRepository.getAllLogical()) {
-					if(workout.getSportFacility().getName().equals(sportFacility.entity.getName()) && sportFacility.deleted == false) {
-						coaches.add(workout.getCoach());
+				if(isCoachDuplicated(workout.getCoach().getUsername(), coaches)) {
+					for(LogicalEntity<SportFacility> sportFacility: sportFacilityRepository.getAllLogical()) {
+						if(workout.getSportFacility().getName().equals(sportFacility.entity.getName()) && sportFacility.deleted == false) {
+							coaches.add(workout.getCoach());
+						}
 					}
 				}
 			}
 		}
 		return coaches;
+	}
+	
+	private boolean isCoachDuplicated(String username, List<Coach> coaches) {
+		for(Coach coach: coaches) {
+			if(coach.getUsername().equals(username)) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public List<Workout> getWorkoutsBySportFacilityName(String sportFacilityName){
@@ -130,5 +141,17 @@ public class WorkoutService {
 			}
 		}
 		return false;
+	}
+	
+	public void addNewWorkout(String sportFacilityName, Workout workout) {
+		workoutRepository.addOne(new Workout(workout.getId(), workout.getName(), workout.getType(), sportFacilityRepository.getOne(sportFacilityName), workout.getDuration(), workout.getCoach(), workout.getDescription(), workout.getImage()));
+	}
+	
+	public void editWorkout(String sportFacilityName, Workout workout) {
+		for(Workout w: workoutRepository.getAll()) {
+			if(w.getName().equals(workout.getName())) {
+				workoutRepository.update(w.getId(), workout);
+			}
+		}
 	}
 }

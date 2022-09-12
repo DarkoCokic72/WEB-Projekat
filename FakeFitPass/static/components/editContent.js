@@ -92,7 +92,7 @@ Vue.component('editContent', {
     },
     template: `
     <div> 
-    <h1>Izmena postojeceg sadrzaja</h1>
+    <h1>Izmena postojećeg sadržaja</h1>
     <form action = "#/" method = "put" @submit = "checkForm">
         <table>
             <tr>
